@@ -1,3 +1,13 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  { path: '', loadComponent: () => import('./features/home/home').then((m) => m.Home) },
+  { path: 'generate', loadComponent: () => import('./features/generate/generate').then((m) => m.Generate) },
+  { path: 'preferences', loadComponent: () => import('./features/preferences/preferences').then((m) => m.PreferencesPage) },
+  { path: 'loading', loadComponent: () => import('./features/loading/loading').then((m) => m.Loading) },
+  { path: 'results', loadComponent: () => import('./features/results/results').then((m) => m.Results) },
+  { path: 'recipe/:id', loadComponent: () => import('./features/recipe-detail/recipe-detail').then((m) => m.RecipeDetail) },
+  { path: 'cookbook', loadComponent: () => import('./features/cookbook/cookbook').then((m) => m.Cookbook) },
+  { path: 'impressum', loadComponent: () => import('./features/impressum/impressum').then((m) => m.Impressum) },
+  { path: '**', redirectTo: '' },
+];

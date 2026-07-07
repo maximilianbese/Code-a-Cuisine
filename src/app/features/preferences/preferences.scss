@@ -1,0 +1,22 @@
+.page { padding-top: 32px; padding-bottom: 56px; }
+.page__top { display: flex; flex-direction: column; gap: 8px; margin-bottom: 30px; }
+.back { color: var(--green); }
+.page__title { color: var(--green-heading); font-size: 38px; margin-bottom: 40px; }
+
+.counts { display: flex; justify-content: center; gap: 90px; margin-bottom: 44px; flex-wrap: wrap; }
+.counts__label { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+
+.prefs { max-width: 860px; margin: 0 auto 44px; padding: 34px 40px; }
+.prefs__heading { font-size: 22px; color: var(--green); margin: 26px 0 16px; }
+.prefs__heading:first-child { margin-top: 0; }
+.prefs__chips { display: flex; flex-wrap: wrap; gap: 14px; }
+
+.chip--stacked { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.15; }
+.chip--stacked small { font-weight: 500; opacity: .75; font-size: 12px; }
+
+.generate { padding: 16px 40px; font-size: 18px; }
+
+@media (max-width: 720px) {
+  .counts { gap: 32px; }
+  .prefs { padding: 26px 22px; }
+}

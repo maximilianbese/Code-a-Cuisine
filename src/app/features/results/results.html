@@ -1,0 +1,39 @@
+<section class="results surface-green">
+  <div class="container results__inner">
+    <header class="results__top"><app-logo variant="light" /></header>
+
+    <div class="results__hero">
+      <div class="results__intro">
+        <h1 class="results__title">The recipe results</h1>
+        <p class="results__lead">We took what you have and let our AI do the thinking. Here are 3 easy recipes you can make right now!</p>
+        <div class="results__tags">
+          <span class="chip is-static">{{ recipes[0].cuisine }}</span>
+          <span class="chip is-static">{{ recipes[0].timeLabel }}</span>
+        </div>
+      </div>
+      <img class="results__art" src="/images/robot-arm.svg" alt="" aria-hidden="true" />
+    </div>
+
+    <div class="results__grid">
+      @for (recipe of recipes; track recipe.id) {
+        <article class="rcard">
+          <img class="rcard__icon" src="/icons/chef.svg" alt="" />
+          <p class="rcard__eyebrow">Recipe {{ recipe.index }}</p>
+          <h2 class="rcard__title">{{ recipe.title }}</h2>
+          <p class="rcard__time">
+            <img class="icon" src="/icons/clock-green.svg" alt="" /> Cooking time: {{ recipe.cookingTimeMin }}min
+          </p>
+          <a class="btn btn-cream rcard__view" [routerLink]="['/recipe', recipe.id]">View</a>
+        </article>
+      }
+    </div>
+
+    <div class="results__foot">
+      <a class="link-arrow" (click)="regenerate()" role="button" tabindex="0" (keyup.enter)="regenerate()">
+        Generate new recipe
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 12h15m0 0-6-6m6 6-6 6"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </a>
+    </div>
+  </div>
+</section>

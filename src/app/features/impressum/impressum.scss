@@ -1,0 +1,6 @@
+.page { padding-top: 32px; padding-bottom: 60px; max-width: 760px; }
+.page__top { display: flex; flex-direction: column; gap: 8px; margin-bottom: 26px; }
+.back { color: var(--green); }
+.page__title { color: var(--green-heading); font-size: 40px; margin-bottom: 24px; }
+.legal h2 { font-size: 20px; color: var(--green); margin: 24px 0 8px; }
+.legal p { line-height: 1.6; }

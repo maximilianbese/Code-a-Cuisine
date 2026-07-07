@@ -1,0 +1,35 @@
+.page { height: 100vh; overflow: hidden; padding-top: 20px; padding-bottom: 20px; display: flex; flex-direction: column; }
+.page__top { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+.back { color: var(--green); }
+
+.intro { display: grid; grid-template-columns: 1fr 1.3fr; gap: 36px; align-items: start; margin-bottom: 22px; }
+.intro__title { font-size: 34px; color: var(--green-heading); margin-bottom: 8px; }
+.intro__heart { color: #ff6b6b; }
+.intro__lead { font-size: 15px; max-width: 42ch; }
+
+.liked__title { font-size: 18px; margin-bottom: 10px; }
+.liked__row { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 4px; }
+.liked__card {
+  flex: none; width: 200px;
+  background: var(--sage); border-radius: var(--radius-sm);
+  padding: 12px 16px; display: flex; flex-direction: column; gap: 6px;
+}
+.liked__time { color: var(--muted); font-size: 13px; }
+.liked__name { font-weight: 600; color: var(--green-heading); }
+.liked__likes { color: var(--muted); font-size: 13px; }
+
+.cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 24px; }
+.cat__photo {
+  width: 100%; height: clamp(120px, 24vh, 220px); border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--sage), var(--sage-deep));
+  object-fit: cover; display: block;
+}
+.cat__label { font-size: 17px; font-weight: 600; color: var(--green-heading); margin-bottom: 8px; }
+
+.page__foot { display: flex; justify-content: flex-end; margin-top: auto; padding-top: 12px; }
+.page__foot .link-arrow { color: var(--green); font-size: 16px; }
+
+@media (max-width: 900px) {
+  .intro { grid-template-columns: 1fr; }
+  .cats { grid-template-columns: 1fr; }
+}

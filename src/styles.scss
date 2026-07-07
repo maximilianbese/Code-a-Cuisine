@@ -1,1 +1,171 @@
-/* You can add global styles to this file, and also import other style files */
+/* Code à Cuisine – global design tokens & reusable styles */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&display=swap');
+
+:root {
+  --green: #396039;
+  --green-deep: #2f5030;
+  --green-heading: #3f7a3c;
+  --green-cta: #4c7a34;
+  --green-cta-hover: #416a2c;
+  --cream: #f4eede;
+  --cream-light: #fbf8ef;
+  --sage: #dbe4d3;
+  --sage-deep: #c9d6bf;
+  --beige-input: #ece3cf;
+  --ink: #2b2b2b;
+  --muted: #6d7a68;
+  --white: #ffffff;
+
+  --radius-lg: 30px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --shell-max: 1240px;
+  --font: 'Quicksand', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --font-display: 'Ubuntu', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+
+body {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { margin: 0; font-weight: 600; line-height: 1.12; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); }
+img { max-width: 100%; display: block; }
+
+.container {
+  width: 100%;
+  max-width: var(--shell-max);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 16px;
+  border: 0;
+  border-radius: 14px;
+  padding: 14px 28px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background .2s ease, transform .08s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-cream { background: var(--cream); color: var(--green-cta); }
+.btn-cream:hover { background: #fff7e8; }
+.btn-green { background: var(--green-cta); color: var(--cream-light); }
+.btn-green:hover { background: var(--green-cta-hover); }
+.btn-block { width: 100%; }
+
+/* ---------- Chips / pills ---------- */
+.chip {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 9px 20px;
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--green);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.chip:hover { border-color: var(--sage-deep); }
+.chip.is-active { background: var(--green); color: var(--cream); border-color: var(--green); }
+.chip.is-static { cursor: default; }
+.chip.is-static:hover { border-color: transparent; }
+
+/* ---------- Cards & surfaces ---------- */
+.card { background: var(--sage); border-radius: var(--radius-md); padding: 26px; }
+.surface-green { background: var(--green); color: var(--cream); }
+
+/* ---------- Links with arrow ---------- */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+.link-arrow svg { width: 22px; height: 22px; }
+
+/* ---------- Stepper (+ / -) ---------- */
+.stepper { display: inline-flex; align-items: center; gap: 14px; }
+.stepper__btn {
+  width: 34px; height: 34px;
+  border: 2px solid var(--green);
+  background: transparent;
+  color: var(--green);
+  border-radius: 9px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.stepper__btn:hover { background: var(--sage); }
+.stepper__value { font-weight: 600; min-width: 90px; }
+
+/* ---------- Text inputs ---------- */
+.field {
+  width: 100%;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 16px;
+  padding: 14px 18px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--beige-input);
+  color: var(--ink);
+}
+.field:focus { outline: 2px solid var(--green); }
+
+/* ---------- Section banner (recipe detail) ---------- */
+.banner {
+  background: var(--cream);
+  border-radius: var(--radius-md);
+  padding: 16px 24px;
+  text-align: center;
+  color: var(--green);
+  font-size: 22px;
+  font-weight: 600;
+}
+.banner--img {
+  background: none;
+  padding: 0;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- Utility ---------- */
+.muted { color: var(--muted); }
+.center { text-align: center; }
+.stack { display: flex; flex-direction: column; }
+
+/* Inline icon that sits on a text baseline (sized to the surrounding text). */
+.icon {
+  height: 1em;
+  width: auto;
+  flex: none;
+  vertical-align: -0.15em;
+}
+
+@media (max-width: 720px) {
+  .container { padding: 0 20px; }
+  .btn { padding: 13px 22px; }
+}

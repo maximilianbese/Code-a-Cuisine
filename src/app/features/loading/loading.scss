@@ -1,0 +1,30 @@
+.loading { min-height: 100vh; display: flex; flex-direction: column; }
+.loading__top { padding-top: 40px; }
+.loading__center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+}
+.loading__card {
+  width: 220px; height: 240px;
+  border-radius: 22px;
+  background: linear-gradient(120deg, var(--sage) 30%, #eef3ea 50%, var(--sage) 70%);
+  background-size: 220% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+.loading__text { color: var(--cream); font-size: 46px; font-weight: 700; display: inline-flex; align-items: flex-end; }
+
+.dots { display: inline-flex; align-items: flex-end; gap: 8px; margin-left: 10px; padding-bottom: 12px; }
+.dots i {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: currentColor; opacity: .25;
+  animation: dot 1.4s ease-in-out infinite;
+}
+.dots i:nth-child(2) { animation-delay: .25s; }
+.dots i:nth-child(3) { animation-delay: .5s; }
+
+@keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+@keyframes dot { 0%, 70%, 100% { opacity: .25; } 35% { opacity: 1; } }

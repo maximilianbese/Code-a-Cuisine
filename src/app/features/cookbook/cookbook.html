@@ -1,0 +1,46 @@
+<main class="page container">
+  <header class="page__top">
+    <app-logo />
+    <a class="link-arrow back" routerLink="/">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M20 12H5m0 0 6-6m-6 6 6 6"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      Back
+    </a>
+  </header>
+
+  <div class="intro">
+    <div>
+      <h1 class="intro__title">Cookbook <span class="intro__heart">♡</span></h1>
+      <p class="intro__lead">From quick bites to gourmet delights, explore them all in our ultimate cookbook and get inspired for your next culinary adventure.</p>
+    </div>
+    <div class="liked">
+      <h2 class="liked__title">Most liked recipes ♡</h2>
+      <div class="liked__row">
+        @for (recipe of mostLiked; track recipe.id) {
+          <a class="liked__card" [routerLink]="['/recipe', recipe.id]">
+            <p class="liked__time"><img class="icon" src="/icons/clock-green.svg" alt="" /> {{ recipe.cookingTimeMin }}min</p>
+            <p class="liked__name">{{ recipe.title }}</p>
+            <span class="liked__likes">♡ {{ recipe.likes }}</span>
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+
+  <section class="cats">
+    @for (cat of categories; track cat.key) {
+      <article class="cat">
+        <p class="cat__label">{{ cat.label }} <span>{{ cat.emoji }}</span></p>
+        <img class="cat__photo" [src]="'/images/' + cat.key + '-cuisine.svg'" [alt]="cat.label" />
+      </article>
+    }
+  </section>
+
+  <div class="page__foot">
+    <a class="link-arrow" routerLink="/generate">
+      Generate new recipe
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12h15m0 0-6-6m6 6-6 6"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </a>
+  </div>
+</main>

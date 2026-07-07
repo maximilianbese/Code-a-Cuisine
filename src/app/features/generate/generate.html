@@ -1,0 +1,52 @@
+<main class="page container">
+  <header class="page__top"><app-logo /></header>
+
+  <h1 class="page__title center">Generate recipe</h1>
+  <p class="page__lead center">Got random stuff in your kitchen? Pop it in—we've got the perfect recipe waiting.</p>
+
+  <div class="gen-grid">
+    <section class="card form">
+      <label class="form__label" for="ing-name">Ingredient</label>
+      <input id="ing-name" class="field" placeholder="e.g. Pasta"
+        [ngModel]="name()" (ngModelChange)="name.set($event)" (keyup.enter)="add()" />
+
+      <label class="form__label" for="ing-amount">Serving size</label>
+      <div class="form__row">
+        <input id="ing-amount" class="field field--num" type="number" min="1"
+          [ngModel]="amount()" (ngModelChange)="amount.set($event)" />
+        <select class="field field--unit" [ngModel]="unit()" (ngModelChange)="unit.set($event)">
+          @for (u of units; track u) { <option [value]="u">{{ u }}</option> }
+        </select>
+        <button class="add-btn" type="button" (click)="add()" aria-label="Add ingredient">+</button>
+      </div>
+    </section>
+
+    <section class="card list">
+      <h2 class="list__title">List of your Ingredients</h2>
+      @if (ingredients().length) {
+        <ul class="list__items">
+          @for (item of ingredients(); track $index) {
+            <li class="list__item">
+              <span class="list__amount">{{ item.amount }}{{ item.unit === 'piece' ? '' : item.unit }}</span>
+              <span class="list__name">{{ item.name }}</span>
+              <button class="list__act" type="button" (click)="edit($index)" aria-label="Edit">
+                <img class="icon" src="/icons/edit.svg" alt="" />
+              </button>
+              <button class="list__act" type="button" (click)="remove($index)" aria-label="Remove">
+                <img class="icon" src="/icons/delete.svg" alt="" />
+              </button>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="muted">No ingredients yet — add at least one to continue.</p>
+      }
+    </section>
+  </div>
+
+  <div class="center">
+    <button class="btn btn-green next" type="button" [disabled]="!ingredients().length" (click)="next()">
+      Next step
+    </button>
+  </div>
+</main>
