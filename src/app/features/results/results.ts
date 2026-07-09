@@ -15,6 +15,7 @@ export class Results {
   private readonly router = inject(Router);
   readonly recipes = this.service.getResults();
 
+  /** Restart the flow to generate a new set of recipes. */
   regenerate(): void {
     this.router.navigate(['/generate']);
   }

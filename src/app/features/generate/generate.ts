@@ -22,6 +22,7 @@ export class Generate {
   readonly amount = signal(100);
   readonly unit = signal<string>('gram');
 
+  /** Add the current input as an ingredient, then clear the name field. */
   add(): void {
     const name = this.name().trim();
     if (!name) return;
@@ -29,6 +30,7 @@ export class Generate {
     this.name.set('');
   }
 
+  /** Load an existing ingredient back into the form for editing. */
   edit(index: number): void {
     const item = this.ingredients()[index];
     if (!item) return;
@@ -38,10 +40,12 @@ export class Generate {
     this.flow.removeIngredient(index);
   }
 
+  /** Remove the ingredient at the given index from the list. */
   remove(index: number): void {
     this.flow.removeIngredient(index);
   }
 
+  /** Continue to the preferences step when at least one ingredient exists. */
   next(): void {
     if (this.ingredients().length) this.router.navigate(['/preferences']);
   }

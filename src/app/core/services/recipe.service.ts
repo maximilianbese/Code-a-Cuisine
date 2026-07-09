@@ -1,22 +1,33 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { CuisineCategory, Recipe } from '../models/recipe.model';
 import { CUISINE_CATEGORIES, RESULT_RECIPES } from './recipe-data';
 
-/** Provides recipes and cookbook data (mocked until n8n is wired in). */
+/** Holds the current recipes and cookbook data (seeded with mock data). */
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
+  private readonly _results = signal<Recipe[]>(RESULT_RECIPES);
+
+  /** The most recently generated recipe suggestions. */
   getResults(): Recipe[] {
-    return RESULT_RECIPES;
+    return this._results();
   }
 
+  /** Replace the current results (e.g. after a generation run). */
+  setResults(recipes: Recipe[]): void {
+    this._results.set(recipes.length ? recipes : RESULT_RECIPES);
+  }
+
+  /** Look up a single recipe by its id. */
   getById(id: string): Recipe | undefined {
-    return RESULT_RECIPES.find((recipe) => recipe.id === id);
+    return this._results().find((recipe) => recipe.id === id);
   }
 
+  /** Recipes sorted by likes, descending, for the cookbook highlights. */
   getMostLiked(): Recipe[] {
-    return [...RESULT_RECIPES].sort((a, b) => b.likes - a.likes);
+    return [...this._results()].sort((a, b) => b.likes - a.likes);
   }
 
+  /** Cuisine categories used to group the cookbook library. */
   getCategories(): CuisineCategory[] {
     return CUISINE_CATEGORIES;
   }

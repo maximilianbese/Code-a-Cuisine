@@ -17,19 +17,23 @@ export class RecipeDetail {
   readonly recipe = signal<Recipe | undefined>(undefined);
   readonly liked = signal(false);
 
+  /** Resolve the recipe from the route as soon as the view is created. */
   constructor() {
     this.load();
   }
 
+  /** Read the id from the route and set the matching recipe. */
   private load(): void {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     this.recipe.set(this.service.getById(id) ?? this.service.getResults()[0]);
   }
 
+  /** Build a 1-based list of chef numbers for the given cook count. */
   chefs(count: number): number[] {
     return Array.from({ length: count }, (_, i) => i + 1);
   }
 
+  /** Toggle the "liked" state of the recipe. */
   toggleLike(): void {
     this.liked.update((value) => !value);
   }

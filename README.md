@@ -1,59 +1,64 @@
-# CodeACuisine
+# Code à Cuisine
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.10.
+AI-powered recipe generator. Enter the ingredients you already have, pick a few
+preferences, and get matching recipe suggestions — helping hobby cooks and
+flatmates cut food waste while eating varied and healthy meals. All generated
+recipes are available in the public cookbook library.
 
-## Development server
+**Repository:** _<GitHub-Link hier eintragen>_
 
-To start a local development server, run:
+## Tech stack
 
-```bash
-ng serve
-```
+- **Angular** (standalone components, signals, lazy-loaded routes)
+- **SCSS** with a central design-token system (`src/styles.scss`)
+- **n8n** for AI recipe generation _(wird noch angebunden)_
+- **Firebase** for storing generated recipes _(wird noch angebunden)_
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Getting started
 
 ```bash
-ng generate --help
+npm install
+ng serve      # → http://localhost:4200
+ng build      # production build
+ng test       # unit tests (Vitest)
 ```
 
-## Building
+## Features
 
-To build the project run:
+- **Ingredient input** with amount, unit, edit and delete (User Stories 1–2)
+- **Preferences**: portions, cooks, cooking time, cuisine and diet (User Stories 3–6)
+- **Quantity validation** with an "Ups! Not quite enough…" dialog when the
+  entered amounts don't cover the chosen servings
+- **Loading interstitial** that bridges the generation wait
+- **Results**: three recipe suggestions (User Story 7)
+- **Recipe detail**: ingredients, chef-assigned steps and nutrition facts
+  (User Stories 8–10)
+- **Cookbook library** grouped by cuisine, with most-liked highlights
+  (User Stories 12–14)
+- **Impressum** and a custom **404** page
+- Fully **responsive** (desktop / tablet / smartphone) with touch-friendly
+  controls; font sizes follow the ≥16px / ≥14px standard
 
-```bash
-ng build
+## Project structure
+
+```
+src/app/
+├─ core/
+│  ├─ models/        # typed interfaces (ingredient, preferences, recipe)
+│  └─ services/      # recipe data + multi-step flow state
+├─ features/         # one folder per screen (home, generate, preferences, …)
+└─ shared/           # reusable UI (logo, dialog)
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Conventions
 
-## Running unit tests
+- Every function is documented with JSDoc.
+- Functions stay within ~14 lines and files under 400 lines.
+- No duplicated logic; shared styles live in `src/styles.scss`.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Open items (backend)
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The recipe data is currently mocked in `recipe.service.ts`. Still to wire up
+together: the **n8n** generation workflow (with validation, error handling,
+logging and IP-based rate limiting), **Firebase** persistence, and the HTTP
+call that replaces the mock in the loading step.

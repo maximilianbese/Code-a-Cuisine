@@ -57,4 +57,13 @@
   <div class="center">
     <button class="btn btn-green generate" type="button" (click)="generate()">Generate a recipe</button>
   </div>
+
+  @if (showDialog()) {
+    <app-dialog
+      heading="Ups! Not quite enough..."
+      message="It looks like some ingredient quantities aren't sufficient for your selected servings. Please add or adjust quantities and try again."
+      actionLabel="Go back to ingredients"
+      (closed)="showDialog.set(false)"
+      (confirmed)="backToIngredients()" />
+  }
 </main>

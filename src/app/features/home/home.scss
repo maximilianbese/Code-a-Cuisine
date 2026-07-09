@@ -57,7 +57,10 @@
 .hero__impressum:hover { opacity: 1; }
 
 @media (max-width: 760px) {
-  .hero__plates { transform: translateX(40%); opacity: .35; }
+  .hero__plates { transform: translateX(26%); opacity: 1; }
+  .plate { width: 40vh; height: 40vh; }
+  .plate--2, .plate--3 { margin-top: -14vh; }
+  .hero__text { max-width: 62%; }
   .hero__title { white-space: normal; }
   .hero__foot { flex-direction: column; align-items: flex-start; gap: 10px; }
 }

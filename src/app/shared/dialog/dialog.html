@@ -1,0 +1,13 @@
+<div class="backdrop" (click)="closed.emit()">
+  <div class="dialog surface-green" role="dialog" aria-modal="true"
+    (click)="$event.stopPropagation()">
+    <button class="dialog__close" type="button" (click)="closed.emit()" aria-label="Close">×</button>
+    <h2 class="dialog__title">{{ heading() }}</h2>
+    <p class="dialog__msg">{{ message() }}</p>
+    <button class="dialog__action link-arrow" type="button" (click)="confirmed.emit()">
+      {{ actionLabel() }}
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12h15m0 0-6-6m6 6-6 6"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button>
+  </div>
+</div>

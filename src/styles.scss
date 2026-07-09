@@ -25,7 +25,7 @@
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+html, body { margin: 0; padding: 0; }
 
 body {
   font-family: var(--font);
@@ -34,6 +34,8 @@ body {
   line-height: 1.5;
   color: var(--ink);
   background: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -76,7 +78,7 @@ img { max-width: 100%; display: block; }
 .chip {
   font-family: var(--font);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
   padding: 9px 20px;
   border-radius: 999px;
   background: var(--cream);
@@ -106,12 +108,12 @@ img { max-width: 100%; display: block; }
 /* ---------- Stepper (+ / -) ---------- */
 .stepper { display: inline-flex; align-items: center; gap: 14px; }
 .stepper__btn {
-  width: 34px; height: 34px;
+  width: 44px; height: 44px;
   border: 2px solid var(--green);
   background: transparent;
   color: var(--green);
-  border-radius: 9px;
-  font-size: 20px;
+  border-radius: 11px;
+  font-size: 22px;
   line-height: 1;
   cursor: pointer;
   display: inline-flex;

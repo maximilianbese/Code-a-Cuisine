@@ -12,11 +12,12 @@
 .prefs__chips { display: flex; flex-wrap: wrap; gap: 14px; }
 
 .chip--stacked { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.15; }
-.chip--stacked small { font-weight: 500; opacity: .75; font-size: 12px; }
+.chip--stacked small { font-weight: 500; opacity: .75; font-size: 14px; }
 
 .generate { padding: 16px 40px; font-size: 18px; }
 
 @media (max-width: 720px) {
-  .counts { gap: 32px; }
+  .page__title { text-align: left; }
+  .counts { flex-direction: column; justify-content: flex-start; gap: 24px; }
   .prefs { padding: 26px 22px; }
 }

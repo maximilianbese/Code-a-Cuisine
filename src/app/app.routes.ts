@@ -9,5 +9,5 @@ export const routes: Routes = [
   { path: 'recipe/:id', loadComponent: () => import('./features/recipe-detail/recipe-detail').then((m) => m.RecipeDetail) },
   { path: 'cookbook', loadComponent: () => import('./features/cookbook/cookbook').then((m) => m.Cookbook) },
   { path: 'impressum', loadComponent: () => import('./features/impressum/impressum').then((m) => m.Impressum) },
-  { path: '**', redirectTo: '' },
+  { path: '**', loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound) },
 ];
