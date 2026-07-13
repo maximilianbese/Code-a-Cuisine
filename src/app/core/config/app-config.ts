@@ -6,5 +6,5 @@ export interface AppConfig {
 
 /** Active configuration. Set the n8n webhook URL to enable live generation. */
 export const APP_CONFIG: AppConfig = {
-  n8nWebhookUrl: 'https://maximilianbese.app.n8n.cloud/webhook/generate-recipes',
+  n8nWebhookUrl: 'https://maximilianbese.app.n8n.cloud/webhook/generate-recipesng',
 };
