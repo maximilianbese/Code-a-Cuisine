@@ -10,6 +10,7 @@ const PASTA: Recipe = {
   diet: 'Vegetarian',
   likes: 68,
   cooks: 2,
+  portions: 2,
   nutrition: { calories: 630, protein: 18, fat: 24, carbs: 58 },
   yourIngredients: [
     { amount: '80g', name: 'Pasta noodles' },

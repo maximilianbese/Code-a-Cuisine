@@ -65,6 +65,22 @@ der Aufruf schlägt fehl, fällt die App automatisch auf die Mock-Daten zurück.
    ersetzen, Credential zuweisen, dann den Node **aktivieren** (Rechtsklick →
    „Activate", der Node ist standardmäßig deaktiviert).
 
+## 6. Rate-Limiting & Fehlerbehandlung (Checkliste)
+
+**IP-Quota (Kostenairbag):** Der Node **„Rate Limit (IP)"** zählt pro IP-Adresse
+und Tag (max. **3**) sowie systemweit (max. **12**). Bei Überschreitung antwortet
+der Workflow über **„Respond Quota Exceeded"** mit HTTP **429** und einer klaren
+Meldung. Der Zähler liegt in den Workflow-Static-Data und setzt sich täglich
+zurück – keine externe Datenbank nötig.
+
+**Fehler-Benachrichtigung:** Der **„Error Trigger"** → **„Send Error Email"**
+schickt bei einem Fehler eine E-Mail.
+
+1. Beim Node **„Send Error Email"** ein **SMTP-Credential** hinterlegen und den
+   echten Empfänger (`toEmail`) eintragen.
+2. In den **Workflow-Settings** (⋯ → *Settings*) unter **Error Workflow** diesen
+   Workflow selbst auswählen, damit seine eigenen Fehler gemeldet werden.
+
 ## Datenverträge
 
 **Request von der App (Webhook-Body):**

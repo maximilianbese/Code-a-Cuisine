@@ -27,11 +27,15 @@
           <span class="chip is-static"><img class="icon" src="/icons/favorite-black.svg" alt="Likes" /> {{ r.likes }}</span>
         </div>
         <p class="nutri__label">Nutritional information</p>
+        <div class="nutri__toggle" role="group" aria-label="Nutrition scope">
+          <button type="button" class="chip" [class.is-active]="!showTotal()" (click)="showTotal.set(false)">Per portion</button>
+          <button type="button" class="chip" [class.is-active]="showTotal()" (click)="showTotal.set(true)">Total ({{ r.portions }} portions)</button>
+        </div>
         <div class="nutri">
-          <div class="nutri__cell"><span>Energie</span><b>{{ r.nutrition.calories }} kcal</b></div>
-          <div class="nutri__cell"><span>Protein</span><b>{{ r.nutrition.protein }}g</b></div>
-          <div class="nutri__cell"><span>Fat</span><b>{{ r.nutrition.fat }}g</b></div>
-          <div class="nutri__cell"><span>Carbs</span><b>{{ r.nutrition.carbs }}g</b></div>
+          <div class="nutri__cell"><span>Energie</span><b>{{ nutritionView().calories }} kcal</b></div>
+          <div class="nutri__cell"><span>Protein</span><b>{{ nutritionView().protein }}g · {{ macroPercent('protein') }}%</b></div>
+          <div class="nutri__cell"><span>Fat</span><b>{{ nutritionView().fat }}g · {{ macroPercent('fat') }}%</b></div>
+          <div class="nutri__cell"><span>Carbs</span><b>{{ nutritionView().carbs }}g · {{ macroPercent('carbs') }}%</b></div>
         </div>
       </div>
     </section>
@@ -68,6 +72,24 @@
         </article>
       }
     </section>
+
+    @if (r.cooks > 1) {
+      <section class="todo">
+        <h2 class="cols__title">Task split per cook</h2>
+        <div class="todo__grid">
+          @for (group of tasksByChef(); track group.chef) {
+            <article class="todo__col">
+              <h3 class="todo__chef">Chef {{ group.chef }}</h3>
+              <ul class="todo__list">
+                @for (step of group.steps; track step.order) {
+                  <li class="todo__item">{{ step.order }}. {{ step.title }}</li>
+                }
+              </ul>
+            </article>
+          }
+        </div>
+      </section>
+    }
 
     <footer class="finish surface-green">
       <span>Just finished this meal? Give it a heart, so the others know this is delicious.</span>

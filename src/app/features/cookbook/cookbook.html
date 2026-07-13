@@ -27,12 +27,38 @@
     </div>
   </div>
 
-  <section class="cats">
+  <section class="cats" aria-label="Filter by cuisine">
     @for (cat of categories; track cat.key) {
-      <article class="cat">
-        <p class="cat__label">{{ cat.label }} <span>{{ cat.emoji }}</span></p>
+      <button class="cat" type="button" [class.is-active]="selected() === cat.key"
+        [attr.aria-pressed]="selected() === cat.key" (click)="selectCuisine(cat.key)">
+        <span class="cat__label">{{ cat.label }} <span>{{ cat.emoji }}</span></span>
         <img class="cat__photo" [src]="'/images/' + cat.key + '-cuisine.svg'" [alt]="cat.label" />
-      </article>
+      </button>
+    }
+  </section>
+
+  <section class="library">
+    <h2 class="library__title">All recipes</h2>
+    @if (pageItems().length) {
+      <div class="library__grid">
+        @for (recipe of pageItems(); track recipe.id) {
+          <a class="lib-card" [routerLink]="['/recipe', recipe.id]">
+            <h3 class="lib-card__name">{{ recipe.title }}</h3>
+            <p class="lib-card__meta">
+              <img class="icon" src="/icons/clock-green.svg" alt="" /> {{ recipe.cookingTimeMin }}min · {{ recipe.cuisine }}
+            </p>
+          </a>
+        }
+      </div>
+      @if (pageCount() > 1) {
+        <nav class="pager" aria-label="Library pages">
+          <button class="pager__btn" type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)">Previous</button>
+          <span class="pager__status">Page {{ page() }} of {{ pageCount() }}</span>
+          <button class="pager__btn" type="button" [disabled]="page() === pageCount()" (click)="goToPage(page() + 1)">Next</button>
+        </nav>
+      }
+    } @else {
+      <p class="muted">No recipes in this category yet.</p>
     }
   </section>
 

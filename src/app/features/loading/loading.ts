@@ -6,6 +6,7 @@ import { RecipeFlowService } from '../../core/services/recipe-flow.service';
 import { RecipeApiService } from '../../core/services/recipe-api.service';
 import { RecipeService } from '../../core/services/recipe.service';
 import { RecipePersistenceService } from '../../core/services/recipe-persistence.service';
+import { QuotaService } from '../../core/services/quota.service';
 import { GenerateRequest } from '../../core/models/generate-request.model';
 import { Recipe } from '../../core/models/recipe.model';
 
@@ -25,6 +26,7 @@ export class Loading {
   private readonly api = inject(RecipeApiService);
   private readonly recipes = inject(RecipeService);
   private readonly store = inject(RecipePersistenceService);
+  private readonly quota = inject(QuotaService);
 
   /** Kick off generation once the component has rendered. */
   constructor() {
@@ -33,6 +35,7 @@ export class Loading {
 
   /** Request recipes (with a minimum visible delay), then continue. */
   private run(): void {
+    this.quota.consume();
     forkJoin({ recipes: this.api.generate(this.buildRequest()), _: timer(MIN_VISIBLE_MS) })
       .subscribe(({ recipes }) => this.finish(recipes));
   }

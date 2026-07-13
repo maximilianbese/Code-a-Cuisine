@@ -22,6 +22,11 @@ export class RecipeService {
     return this._results().find((recipe) => recipe.id === id);
   }
 
+  /** Every recipe available for the public library (later backed by Firestore). */
+  getAll(): Recipe[] {
+    return this._results();
+  }
+
   /** Recipes sorted by likes, descending, for the cookbook highlights. */
   getMostLiked(): Recipe[] {
     return [...this._results()].sort((a, b) => b.likes - a.likes);

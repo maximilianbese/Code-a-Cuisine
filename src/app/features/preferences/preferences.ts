@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Logo } from '../../shared/logo/logo';
 import { Dialog } from '../../shared/dialog/dialog';
 import { RecipeFlowService } from '../../core/services/recipe-flow.service';
+import { QuotaService, DAILY_QUOTA } from '../../core/services/quota.service';
 import { CuisineOption, DietOption, TimeOption } from '../../core/models/preferences.model';
 
 interface Option<T> { value: T; label: string; hint?: string; }
@@ -16,10 +17,17 @@ interface Option<T> { value: T; label: string; hint?: string; }
 })
 export class PreferencesPage {
   private readonly flow = inject(RecipeFlowService);
+  private readonly quota = inject(QuotaService);
   private readonly router = inject(Router);
   readonly prefs = this.flow.preferences;
+  /** Generations the user has left today. */
+  readonly remaining = this.quota.remaining;
+  /** Daily generation limit shown alongside the remaining count. */
+  readonly dailyQuota = DAILY_QUOTA;
   /** Controls visibility of the "not enough ingredients" dialog. */
   readonly showDialog = signal(false);
+  /** Controls visibility of the "daily quota reached" dialog. */
+  readonly showQuota = signal(false);
 
   readonly times: Option<TimeOption>[] = [
     { value: 'quick', label: 'Quick', hint: 'up to 20min' },
@@ -53,8 +61,9 @@ export class PreferencesPage {
   /** Select the dietary preference. */
   setDiet(value: DietOption): void { this.flow.updatePreferences({ diet: value }); }
 
-  /** Validate quantities, then continue to loading or warn the user. */
+  /** Enforce the daily quota, validate quantities, then continue or warn. */
   generate(): void {
+    if (!this.quota.canGenerate()) return this.showQuota.set(true);
     if (this.flow.hasSufficientQuantities()) this.router.navigate(['/loading']);
     else this.showDialog.set(true);
   }

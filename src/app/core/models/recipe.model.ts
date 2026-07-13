@@ -31,6 +31,8 @@ export interface Recipe {
   diet: string;
   likes: number;
   cooks: number;
+  /** Number of servings the recipe (and its per-portion nutrition) is based on. */
+  portions: number;
   nutrition: NutritionFacts;
   yourIngredients: RecipeIngredient[];
   extraIngredients: RecipeIngredient[];
