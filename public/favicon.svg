@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Code à Cuisine">
+  <rect width="64" height="64" rx="14" fill="#396039"/>
+  <g fill="#f4eede">
+    <circle cx="23" cy="26" r="10.5"/>
+    <circle cx="41" cy="26" r="10.5"/>
+    <circle cx="32" cy="20" r="11.5"/>
+    <rect x="21.5" y="28" width="21" height="16" rx="1.5"/>
+    <rect x="19" y="43" width="26" height="7" rx="3.5"/>
+  </g>
+</svg>
