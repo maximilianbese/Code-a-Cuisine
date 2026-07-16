@@ -2,6 +2,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Logo } from '../../shared/logo/logo';
 import { RecipeService } from '../../core/services/recipe.service';
+import { RecipeApiService } from '../../core/services/recipe-api.service';
+import { Recipe } from '../../core/models/recipe.model';
 
 /** Recipes shown per page in the library grid. */
 const PAGE_SIZE = 20;
@@ -15,20 +17,29 @@ const PAGE_SIZE = 20;
 })
 export class Cookbook {
   private readonly service = inject(RecipeService);
-  private readonly all = this.service.getAll();
-  readonly mostLiked = this.service.getMostLiked();
+  private readonly api = inject(RecipeApiService);
   readonly categories = this.service.getCategories();
 
+  /** All library recipes; seeded with mock data until the live fetch resolves. */
+  readonly all = signal<Recipe[]>(this.service.getAll());
   /** Currently selected cuisine key, or 'all' for no filter. */
   readonly selected = signal<string>('all');
   /** Active page number (1-based). */
   readonly page = signal(1);
 
+  /** Load the recipe library from the backend once the view is created. */
+  constructor() {
+    this.api.getLibrary().subscribe((recipes) => this.all.set(recipes));
+  }
+
+  /** Recipes sorted by likes, descending, for the cookbook highlights. */
+  readonly mostLiked = computed(() => [...this.all()].sort((a, b) => b.likes - a.likes));
+
   /** Recipes matching the selected cuisine filter. */
   readonly filtered = computed(() => {
     const key = this.selected();
-    if (key === 'all') return this.all;
-    return this.all.filter((recipe) => recipe.cuisine.toLowerCase() === key);
+    if (key === 'all') return this.all();
+    return this.all().filter((recipe) => recipe.cuisine.toLowerCase() === key);
   });
 
   /** Total number of pages for the filtered list. */

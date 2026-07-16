@@ -1,35 +1,36 @@
 # Checklisten-Status – Code à Cuisine
 
-Legende: ✅ erfüllt · 🟡 code fertig, braucht Live-Infrastruktur · ⏳ Live-Schritt
+Legende: ✅ erfüllt · 🟡 fertig, kleiner Live-Rest · ⏳ Deployment-Schritt
 
-Der komplette Frontend-Code (Block A) und der n8n-Workflow (Block B) sind fertig
-und der Production-Build läuft grün. Offen sind nur noch die Schritte, die deine
-Accounts brauchen (Block C) und die wir live zusammen erledigen.
+Frontend (Angular), n8n-Workflow und die Live-Infrastruktur (Gemini + Firestore)
+laufen lokal end-to-end getestet: echte Rezepte werden generiert, in Firestore
+gespeichert und die Bibliothek liest live aus Firestore.
 
 ---
 
 ## Allgemeine Anforderungen
 
 - ✅ Angular-Frontend (Standalone, Signals, Lazy Routes), statischer Build
-- ✅ GitHub-Repo + `README.md` (echter Link) + `.gitignore`
-- ✅ Funktionen ≤14 Zeilen · Dateien <400 Zeilen · JSDoc auf allen Funktionen
-- ✅ Semantisches HTML inkl. globalem `<footer>`/`<nav>` mit Impressum-Link
-- ✅ Font-Size ≥16px, Kleingedrucktes ≥14px (geprüft: nichts <14px)
-- 🟡 Rezepte in Firebase gespeichert – Workflow-Node + Modell fertig; scharf
-  schalten mit deinem Firebase-Projekt (Block C)
+- ✅ GitHub-Repo + `README.md` + `.gitignore`
+- ✅ Funktionen ≤14 Zeilen · Dateien <400 Zeilen · JSDoc auf allen Funktionen (45 Fn geprüft)
+- ✅ Semantisches HTML inkl. `<nav>`/`<footer>`-Elementen
+- ✅ Font-Size: kleinste Schrift = 16px (Desktop-Minimum eingehalten)
+- ✅ Layout: Inhalt max. 1440px zentriert, Hintergründe vollflächig, kein horizontales Scrollen
+- ✅ Rezepte in Firebase gespeichert – live getestet (Firestore-Schreiben aktiv)
 
 ## n8n-Anforderungen
 
 - ✅ n8n-Projekt in Git, aussagekräftige Node-Namen
-- ✅ Datenvalidierung im Workflow
-- ✅ **Fehlerbehandlung**: Error-Trigger → E-Mail-Benachrichtigung
-- ✅ **Rate-Limiting**: IP-Quota (3/IP/Tag, 12/Tag) mit 429-Antwort
-- ✅ Klare JSON-Datenverträge
+- ✅ Datenvalidierung im Workflow (Validate & Build Prompt)
+- ✅ Rate-Limiting: IP-Quota (3/IP/Tag, 12/Tag), Antwort HTTP 429
+- ✅ Klare JSON-Datenverträge (Request/Response passen zum Frontend-Modell)
+- 🟡 Fehlerbehandlung: Error-Trigger → „Send Error Email" verdrahtet; sendet erst,
+  wenn ein SMTP-Credential hinterlegt ist (sonst nur Struktur vorhanden)
 
 ## User Experience / Responsive
 
 - ✅ Ladezeit überbrückt (Loading-Screen)
-- ✅ Responsive Desktop/Tablet/Smartphone, touch-freundlich
+- ✅ Responsive Desktop/Tablet, einspaltig ab Mobile-Breakpoints (Figma-Mobile-Layout)
 - ✅ Nährwerte klar auf kleinen Bildschirmen (umgebrochene Zellen)
 
 ## User Stories
@@ -37,19 +38,17 @@ Accounts brauchen (Block C) und die wir live zusammen erledigen.
 - ✅ US1–US8 (Eingabe, Portionen, Zeit, Kochstil, Diät, Helfer, 3 Vorschläge, Schritte)
 - ✅ US9 ToDo-Liste pro Kochhelfer (Detailansicht)
 - ✅ US10 Nährwerte pro Portion **und** gesamt, inkl. Makro-Prozente
-- ✅ US11 Quota-Anzeige im Frontend (verbleibende Nutzungen) + Sperre
-- ✅ US12 Bibliothek mit allen Rezepten + Paginierung (20/Seite)
+- ✅ US11 Quota-Anzeige im Frontend + Sperre
+- ✅ US12 Bibliothek (live aus Firestore) + Paginierung (20/Seite)
 - ✅ US13 Klickbare Kategorie-Filter
 - ✅ US14 Rezept-Detail aus Bibliothek
-- ✅ Impressum (im Footer verlinkt) + 404-Seite
+- ✅ Impressum-Seite (`/impressum`, per URL) + 404-Seite
 
 ---
 
-## Block C – nur noch live zusammen (braucht deine Accounts)
+## Live getestet (Block C – erledigt)
 
-- ⏳ Firebase-Projekt + Firestore + Service-Account → Speicherung real aktiv
-- ⏳ Bibliothek aus Firestore lesen (Frontend `getAll()` auf Live-Quelle umstellen)
-- ⏳ Gemini-API-Key + n8n läuft (Oracle) → echte Generierung end-to-end
-- ⏳ Webhook-URL in `app-config.ts` setzen + CORS für die Domain freigeben
-
-Anleitungen dafür: `N8N-ORACLE-SETUP.md`, `n8n/N8N-SETUP.md`, `NETCUP-DEPLOY.md`.
+- ✅ Gemini-Generierung (`gemini-2.5-flash`) – echte Rezepte, passend zu Eingabe/Küche
+- ✅ Firestore-Speicherung (Service-Account) aktiv
+- ✅ Bibliothek liest live aus Firestore (`/webhook/library`)
+- ✅ Webho

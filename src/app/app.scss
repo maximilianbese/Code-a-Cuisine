@@ -1,0 +1,5 @@
+/* Full-width shell; content is capped at 1440px by .container / page wrappers. */
+.app-shell {
+  width: 100%;
+  overflow-x: clip;
+}

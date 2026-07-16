@@ -40,7 +40,7 @@ ng test       # unit tests (Vitest)
   IP-based in n8n (User Story 11)
 - **Cookbook library**: all recipes with cuisine filtering and pagination,
   plus most-liked highlights (User Stories 12–14)
-- **Impressum** (linked from the global footer) and a custom **404** page
+- **Impressum** page (`/impressum`) and a custom **404** page
 - Fully **responsive** (desktop / tablet / smartphone) with touch-friendly
   controls; font sizes follow the ≥16px / ≥14px standard
 

@@ -14,9 +14,9 @@
   background: var(--sage); border-radius: var(--radius-sm);
   padding: 12px 16px; display: flex; flex-direction: column; gap: 6px;
 }
-.liked__time { color: var(--muted); font-size: 14px; }
+.liked__time { color: var(--muted); font-size: 16px; }
 .liked__name { font-weight: 600; color: var(--green-heading); }
-.liked__likes { color: var(--muted); font-size: 14px; }
+.liked__likes { color: var(--muted); font-size: 16px; }
 
 .cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 24px; }
 .cat {
@@ -41,7 +41,7 @@
 }
 .lib-card:hover { transform: translateY(-2px); }
 .lib-card__name { font-size: 16px; font-weight: 600; color: var(--green-heading); }
-.lib-card__meta { color: var(--muted); font-size: 14px; }
+.lib-card__meta { color: var(--muted); font-size: 16px; }
 
 .pager { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 22px; }
 .pager__btn {
@@ -49,7 +49,7 @@
   border-radius: 11px; padding: 9px 18px; font-weight: 600; cursor: pointer;
 }
 .pager__btn:disabled { opacity: .4; cursor: not-allowed; }
-.pager__status { font-size: 15px; color: var(--muted); }
+.pager__status { font-size: 16px; color: var(--muted); }
 
 .page__foot { display: flex; justify-content: flex-end; margin-top: auto; padding-top: 12px; }
 .page__foot .link-arrow { color: var(--green); font-size: 16px; }

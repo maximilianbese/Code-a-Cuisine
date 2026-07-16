@@ -14,7 +14,8 @@ export class RecipeService {
 
   /** Replace the current results (e.g. after a generation run). */
   setResults(recipes: Recipe[]): void {
-    this._results.set(recipes.length ? recipes : RESULT_RECIPES);
+    const list = Array.isArray(recipes) ? recipes : [];
+    this._results.set(list.length ? list : RESULT_RECIPES);
   }
 
   /** Look up a single recipe by its id. */
@@ -22,14 +23,9 @@ export class RecipeService {
     return this._results().find((recipe) => recipe.id === id);
   }
 
-  /** Every recipe available for the public library (later backed by Firestore). */
+  /** Seed recipes used as a fallback until the live library resolves. */
   getAll(): Recipe[] {
     return this._results();
-  }
-
-  /** Recipes sorted by likes, descending, for the cookbook highlights. */
-  getMostLiked(): Recipe[] {
-    return [...this._results()].sort((a, b) => b.likes - a.likes);
   }
 
   /** Cuisine categories used to group the cookbook library. */

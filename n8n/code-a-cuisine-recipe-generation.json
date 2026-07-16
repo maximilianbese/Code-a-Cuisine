@@ -28,13 +28,21 @@
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
           "conditions": [
             {
               "id": "cond-quota",
               "leftValue": "={{ $json.exceeded }}",
               "rightValue": true,
-              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
             }
           ],
           "combinator": "and"
@@ -73,11 +81,14 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "key", "value": "YOUR_GEMINI_API_KEY" }
+            {
+              "name": "key",
+              "value": "YOUR_GEMINI_API_KEY"
+            }
           ]
         },
         "sendBody": true,
@@ -164,40 +175,195 @@
       "typeVersion": 2.1,
       "position": [180, 620],
       "notes": "SMTP-Credential zuweisen und echten Empfaenger (toEmail) eintragen."
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "library",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-library",
+      "name": "Webhook Library",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-260, 720]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "projectId": "YOUR_FIREBASE_PROJECT_ID",
+        "database": "(default)",
+        "collection": "recipes",
+        "returnAll": true,
+        "options": {}
+      },
+      "id": "firestore-library",
+      "name": "Read Firestore Library",
+      "type": "n8n-nodes-base.googleFirebaseCloudFirestore",
+      "typeVersion": 1,
+      "position": [-20, 720]
+    },
+    {
+      "parameters": {
+        "jsCode": "const clean = (o) => Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith('_')));\nconst recipes = $input.all().map((i) => clean(i.json));\nreturn [{ json: { recipes } }];"
+      },
+      "id": "code-aggregate-library",
+      "name": "Aggregate Library",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 720]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.recipes }}",
+        "options": {}
+      },
+      "id": "respond-library",
+      "name": "Respond Library",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [460, 720]
     }
   ],
   "connections": {
     "Webhook": {
-      "main": [[{ "node": "Rate Limit (IP)", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Rate Limit (IP)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Rate Limit (IP)": {
-      "main": [[{ "node": "Quota Exceeded?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Quota Exceeded?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Quota Exceeded?": {
       "main": [
-        [{ "node": "Respond Quota Exceeded", "type": "main", "index": 0 }],
-        [{ "node": "Validate & Build Prompt", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Respond Quota Exceeded",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Validate & Build Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Validate & Build Prompt": {
-      "main": [[{ "node": "Generate with Gemini", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Generate with Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Generate with Gemini": {
-      "main": [[{ "node": "Parse Recipes", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Parse Recipes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Parse Recipes": {
-      "main": [[
-        { "node": "Respond to App", "type": "main", "index": 0 },
-        { "node": "Split Recipes", "type": "main", "index": 0 }
-      ]]
+      "main": [
+        [
+          {
+            "node": "Respond to App",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Recipes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Split Recipes": {
-      "main": [[{ "node": "Save to Firestore", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Save to Firestore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Error Trigger": {
-      "main": [[{ "node": "Send Error Email", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Send Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Library": {
+      "main": [
+        [
+          {
+            "node": "Read Firestore Library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Firestore Library": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Library": {
+      "main": [
+        [
+          {
+            "node": "Respond Library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "settings": { "executionOrder": "v1" },
+  "settings": {
+    "executionOrder": "v1"
+  },
   "active": false
 }

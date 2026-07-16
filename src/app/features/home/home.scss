@@ -2,8 +2,8 @@
 .hero__inner {
   position: relative;
   z-index: 1;
-  max-width: none;
-  margin: 0;
+  max-width: var(--shell-max);
+  margin: 0 auto;
   padding: 40px clamp(28px, 5vw, 88px) 48px;
   display: flex;
   flex-direction: column;
@@ -31,7 +31,7 @@
 .hero__plates {
   position: absolute;
   top: 0;
-  right: 0;
+  right: max(0px, calc((100% - var(--shell-max)) / 2));
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -53,8 +53,6 @@
 .hero__foot { display: flex; align-items: center; gap: 26px; font-size: 22px; }
 .hero__foot-title { font-weight: 600; }
 
-.hero__impressum { font-size: 16px; opacity: .85; text-decoration: underline; }
-.hero__impressum:hover { opacity: 1; }
 
 @media (max-width: 760px) {
   .hero__plates { transform: translateX(26%); opacity: 1; }
@@ -63,4 +61,16 @@
   .hero__text { max-width: 62%; }
   .hero__title { white-space: normal; }
   .hero__foot { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+
+@media (max-width: 480px) {
+  .hero__inner { padding: 24px 20px 28px; gap: 24px; }
+  .hero__text { max-width: 100%; }
+  .hero__title { font-size: clamp(36px, 13vw, 56px); }
+  .hero__eyebrow { font-size: clamp(18px, 6vw, 26px); }
+  .hero__cta { margin-top: 28px; padding: 14px 30px; font-size: 18px; }
+  .hero__plates { opacity: .28; transform: translateX(30%); }
+  .plate { width: 30vh; height: 30vh; }
+  .plate--2, .plate--3 { margin-top: -11vh; }
+  .hero__foot { font-size: 18px; }
 }

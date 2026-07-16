@@ -1,0 +1,20 @@
+# Lokales n8n – 100% kostenlos, keine Kreditkarte.
+# Start:  docker compose -f n8n/docker-compose.local.yml up -d
+# Stop:   docker compose -f n8n/docker-compose.local.yml down   (Daten bleiben im Volume erhalten)
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: cac-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_SECURE_COOKIE=false          # erlaubt Login über http://localhost
+      - N8N_RUNNERS_ENABLED=true
+      - GENERIC_TIMEZONE=Europe/Berlin
+      - N8N_DIAGNOSTICS_ENABLED=false
+    volumes:
+      - n8n_data:/home/node/.n8n          # speichert Workflows + Credentials dauerhaft
+
+volumes:
+  n8n_data:

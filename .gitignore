@@ -42,3 +42,8 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Firestore seed
+firestore-seed/node_modules/
+firestore-seed/serviceAccountKey.json
+**/serviceAccountKey.json

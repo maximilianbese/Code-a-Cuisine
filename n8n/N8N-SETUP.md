@@ -34,7 +34,7 @@ Webhook (POST)  →  Validate & Build Prompt  →  Generate with Gemini
 2. Node **„Generate with Gemini"** öffnen → im Query-Parameter `key` den Platzhalter
    `YOUR_GEMINI_API_KEY` durch deinen Key ersetzen.
    (Sauberer: einen n8n-Credential „Header/Query Auth" anlegen und dort speichern.)
-3. Modell ist `gemini-2.0-flash` (schnell und im Free-Tier). Bei Bedarf auf
+3. Modell ist `gemini-2.5-flash` (schnell und im Free-Tier). Bei Bedarf auf
    `gemini-2.0-pro` o. Ä. ändern.
 
 ## 3. Workflow aktivieren & URL kopieren
@@ -115,3 +115,24 @@ curl -X POST https://<deine-n8n>/webhook-test/generate-recipes \
 Der Workflow nutzt Standard-Nodes. Falls ein Node nach dem Import als „unbekannt"
 erscheint, liegt es an einer abweichenden n8n-Version – den Node dann einmal neu
 aus der Node-Liste hinzufügen (gleicher Name) und verbinden.
+
+## 7. Bibliothek-Endpoint (GET /library)
+
+Neben der Generierung enthält der Workflow einen zweiten Webhook, der die
+Cookbook-Bibliothek direkt aus Firestore liefert:
+
+```
+Webhook Library (GET /library)  →  Read Firestore Library (getAll recipes)
+      →  Aggregate Library (Code)  →  Respond Library  →  Recipe[]
+```
+
+1. Node **„Read Firestore Library"**: `YOUR_FIREBASE_PROJECT_ID` durch
+   `code-a-cuisine-8fb95` ersetzen und dasselbe Firestore-Credential zuweisen
+   wie bei „Save to Firestore".
+2. Beim **Webhook Library**-Node unter Options → Allowed Origins (CORS) die
+   Live-Domain eintragen (wie beim Generate-Webhook).
+3. Nach dem Aktivieren zeigt n8n die URL `…/webhook/library`. Sie steht bereits
+   als `n8nLibraryUrl` in `src/app/core/config/app-config.ts`.
+
+Ist die URL leer oder der Aufruf schlägt fehl, fällt die App automatisch auf die
+Mock-Rezepte zurück – die Bibliothek bleibt also immer funktionsfähig.

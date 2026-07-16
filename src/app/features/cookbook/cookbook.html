@@ -16,7 +16,7 @@
     <div class="liked">
       <h2 class="liked__title">Most liked recipes ♡</h2>
       <div class="liked__row">
-        @for (recipe of mostLiked; track recipe.id) {
+        @for (recipe of mostLiked(); track recipe.id) {
           <a class="liked__card" [routerLink]="['/recipe', recipe.id]">
             <p class="liked__time"><img class="icon" src="/icons/clock-green.svg" alt="" /> {{ recipe.cookingTimeMin }}min</p>
             <p class="liked__name">{{ recipe.title }}</p>
