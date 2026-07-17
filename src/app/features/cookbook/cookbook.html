@@ -18,7 +18,7 @@
       <div class="liked__row">
         @for (recipe of mostLiked(); track recipe.id) {
           <a class="liked__card" [routerLink]="['/recipe', recipe.id]">
-            <p class="liked__time"><img class="icon" src="/icons/clock-green.svg" alt="" /> {{ recipe.cookingTimeMin }}min</p>
+            <p class="liked__time"><img class="icon" src="/assets/cooking-time.svg" alt="" /> {{ recipe.cookingTimeMin }}min</p>
             <p class="liked__name">{{ recipe.title }}</p>
             <span class="liked__likes">♡ {{ recipe.likes }}</span>
           </a>
@@ -45,7 +45,7 @@
           <a class="lib-card" [routerLink]="['/recipe', recipe.id]">
             <h3 class="lib-card__name">{{ recipe.title }}</h3>
             <p class="lib-card__meta">
-              <img class="icon" src="/icons/clock-green.svg" alt="" /> {{ recipe.cookingTimeMin }}min · {{ recipe.cuisine }}
+              <img class="icon" src="/assets/cooking-time.svg" alt="" /> {{ recipe.cookingTimeMin }}min · {{ recipe.cuisine }}
             </p>
           </a>
         }

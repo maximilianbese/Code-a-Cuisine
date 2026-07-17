@@ -32,7 +32,7 @@
   </div>
 
   <section class="card prefs">
-    <h2 class="prefs__heading"><img class="icon" src="/icons/clock-green.svg" alt="" /> Cooking time:</h2>
+    <h2 class="prefs__heading"><img class="icon" src="/assets/cooking-time.svg" alt="" /> Cooking time:</h2>
     <div class="prefs__chips">
       @for (t of times; track t.value) {
         <div class="time-opt">
@@ -42,14 +42,14 @@
       }
     </div>
 
-    <h2 class="prefs__heading"><img class="icon" src="/icons/world.svg" alt="" /> Cuisine</h2>
+    <h2 class="prefs__heading"><img class="icon" src="/assets/cuisine.svg" alt="" /> Cuisine</h2>
     <div class="prefs__chips">
       @for (c of cuisines; track c.value) {
         <button class="chip" [class.is-active]="prefs().cuisine === c.value" (click)="setCuisine(c.value)">{{ c.label }}</button>
       }
     </div>
 
-    <h2 class="prefs__heading"><img class="icon" src="/icons/fork-spoon.svg" alt="" /> Diet preferences</h2>
+    <h2 class="prefs__heading"><img class="icon" src="/assets/diet.svg" alt="" /> Diet preferences</h2>
     <div class="prefs__chips">
       @for (d of diets; track d.value) {
         <button class="chip" [class.is-active]="prefs().diet === d.value" (click)="setDiet(d.value)">{{ d.label }}</button>

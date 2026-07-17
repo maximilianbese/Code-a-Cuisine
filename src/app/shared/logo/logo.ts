@@ -11,6 +11,6 @@ import { RouterLink } from '@angular/router';
 export class Logo {
   readonly variant = input<'dark' | 'light'>('dark');
   readonly src = computed(() =>
-    this.variant() === 'light' ? '/icons/logo-white.svg' : '/icons/logo-green.svg',
+    this.variant() === 'light' ? '/assets/logo-light.svg' : '/assets/logo-dark.svg',
   );
 }

@@ -41,10 +41,10 @@
               <span class="list__amount">{{ item.amount }}{{ item.unit === 'piece' ? '' : item.unit }}</span>
               <span class="list__name">{{ item.name }}</span>
               <button class="list__act" type="button" (click)="edit($index)" aria-label="Edit">
-                <img class="icon" src="/icons/edit.svg" alt="" />
+                <img class="icon" src="/assets/edit.svg" alt="" />
               </button>
               <button class="list__act" type="button" (click)="remove($index)" aria-label="Remove">
-                <img class="icon" src="/icons/delete.svg" alt="" />
+                <img class="icon" src="/assets/delete.svg" alt="" />
               </button>
             </li>
           }

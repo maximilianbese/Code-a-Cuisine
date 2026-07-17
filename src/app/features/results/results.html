@@ -18,12 +18,12 @@
       @for (recipe of recipes; track recipe.id) {
         <article class="rcard">
           <div class="rcard__head">
-            <img class="rcard__icon" src="/icons/chef.svg" alt="" />
+            <img class="rcard__icon" src="/assets/chef.svg" alt="" />
             <p class="rcard__eyebrow">Recipe {{ recipe.index }}</p>
           </div>
           <h2 class="rcard__title">{{ recipe.title }}</h2>
           <p class="rcard__time">
-            <img class="icon" src="/icons/clock-green.svg" alt="" /> Cooking time: {{ recipe.cookingTimeMin }}min
+            <img class="icon" src="/assets/cooking-time.svg" alt="" /> Cooking time: {{ recipe.cookingTimeMin }}min
           </p>
           <a class="btn btn-cream rcard__view" [routerLink]="['/recipe', recipe.id]">View</a>
         </article>
