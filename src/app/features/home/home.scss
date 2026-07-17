@@ -53,25 +53,27 @@
 /* "Go to cookbook" secondary link: smaller and lighter than the title (Figma: 20px / 500). */
 .hero__foot .link-arrow { font-size: 20px; font-weight: 500; color: #faf0e6; }
 
+/* Mobile: plates form one continuous column flush to the right edge, cut to
+   ~half; text sits on the left. Mirrors the Figma mobile frame. */
 @media (max-width: 760px) {
   .hero__plates {
-    justify-content: space-between;
-    padding: 32px 0;
-    transform: translateX(50%);
+    justify-content: center;
+    transform: translateX(56%);
   }
-  .plate { width: 42vw; margin-top: 0; }
-  .plate--2, .plate--3 { margin-top: 0; }
-  .hero__text { max-width: 60%; }
+  /* Sized by viewport height so three plates always fill the column top-to-bottom. */
+  .plate { width: 34vh; margin-top: 0; }
+  .plate--2, .plate--3 { margin-top: -2vh; }
+  .hero__text { max-width: 58%; }
   .hero__title { white-space: normal; }
   .hero__foot { flex-direction: column; align-items: flex-start; gap: 10px; font-size: 20px; }
 }
 
 @media (max-width: 480px) {
   .hero__inner { padding: 24px 20px 28px; gap: 24px; }
-  .hero__text { max-width: 60%; }
-  .hero__title { font-size: clamp(36px, 12vw, 56px); }
-  .hero__eyebrow { font-size: clamp(18px, 6vw, 26px); }
+  .hero__text { max-width: 58%; }
+  .hero__title { font-size: clamp(40px, 12vw, 56px); }
+  .hero__eyebrow { font-size: clamp(20px, 6vw, 26px); }
   .hero__cta { margin-top: 28px; padding: 14px 30px; font-size: 18px; }
-  .plate { width: 44vw; }
+  .plate { width: 37vh; }
   .hero__foot { font-size: 18px; }
 }

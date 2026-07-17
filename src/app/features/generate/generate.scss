@@ -33,7 +33,7 @@
 .suggest__item {
   width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
   padding: 6px 4px; font-family: var(--font); font-weight: 500; font-size: 16px; color: var(--green);
-  transition: color .25s ease;
+  transition: color .3s ease-out;
 }
 .suggest__item:hover { color: var(--green-deep); font-weight: 600; }
 .form__error { color: #b23b3b; font-size: 15px; margin: 8px 0 0; }
@@ -43,10 +43,10 @@
   width: 40px; height: 40px; flex: none;
   border: 0; background: none; color: var(--green);
   font-size: 32px; line-height: 1; cursor: pointer;
-  border-radius: 6px; transition: background .25s ease;
+  border-radius: 6px; transition: background .3s ease-out;
   display: inline-flex; align-items: center; justify-content: center;
 }
-.add-btn:hover { background: rgba(57, 96, 57, .16); }
+.add-btn:hover { background: #fae0c6; }
 
 .list { margin-bottom: 30px; }
 .list__title { font-size: 22px; margin-bottom: 16px; }
@@ -54,7 +54,7 @@
 .list__item {
   display: flex; align-items: center; gap: 12px;
   padding: 6px 10px; margin: 0 -10px;
-  border-radius: 6px; transition: background .25s ease;
+  border-radius: 6px; transition: background .3s ease-out;
 }
 .list__item:hover { background: #fae0c6; }
 .list__bullet { color: var(--green); line-height: 1; }
@@ -63,10 +63,11 @@
 .list__act {
   background: none; border: 0; cursor: pointer; padding: 6px;
   display: inline-flex; line-height: 0; color: var(--green);
-  border-radius: 5px; transition: background .25s ease;
+  border-radius: 5px; transition: background .3s ease-out;
 }
-.list__act .icon { height: 18px; }
-.list__act:hover { background: rgba(57, 96, 57, .16); }
+.list__act .icon { height: 18px; transition: filter .3s ease-out; }
+.list__act:hover { background: var(--green); }
+.list__act:hover .icon { filter: brightness(0) invert(1); }
 
 .page__actions { display: flex; justify-content: flex-end; }
 .next { padding: 14px 40px; }

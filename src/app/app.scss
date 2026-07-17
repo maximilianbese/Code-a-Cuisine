@@ -9,6 +9,6 @@
 .app-shell > :is(app-home, app-generate, app-preferences, app-loading,
   app-results, app-cookbook, app-recipe-detail, app-impressum, app-not-found) {
   display: block;
-  animation: page-enter .32s ease both;
+  animation: page-enter .3s ease-out both;
 }
 @keyframes page-enter { from { opacity: 0; } to { opacity: 1; } }

@@ -10,7 +10,7 @@
 .prefs__heading { font-size: 22px; color: var(--green); margin: 26px 0 16px; display: inline-flex; align-items: center; gap: 8px; }
 .prefs__heading:first-child { margin-top: 0; }
 .prefs__chips { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
-.prefs__chips .chip { font-size: 18px; padding: 8px 22px; }
+.prefs__chips .chip { font-size: 20px; padding: 8px 22px; }
 
 /* Cooking-time option: pill with its hint rendered below, outside the button. */
 .time-opt { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }

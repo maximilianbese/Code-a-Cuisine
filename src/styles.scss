@@ -66,7 +66,7 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: background .25s ease, transform .08s ease;
+  transition: background .3s ease-out, transform .08s ease;
 }
 .btn:active { transform: translateY(1px); }
 .btn-cream { background: #faf0e6; color: #008000; }
@@ -78,15 +78,15 @@ img { max-width: 100%; display: block; }
 /* ---------- Chips / pills ---------- */
 .chip {
   font-family: var(--font);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 16px;
   padding: 9px 20px;
   border-radius: 999px;
   background: #faf0e6;
-  color: var(--green);
+  color: #1e5515;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: border-color .25s ease, background .25s ease, color .25s ease;
+  transition: border-color .3s ease-out, background .3s ease-out, color .3s ease-out;
 }
 .chip:hover { background: #fae0c6; }
 .chip.is-active { background: var(--green); color: var(--cream); border-color: var(--green); }
@@ -104,9 +104,9 @@ img { max-width: 100%; display: block; }
   gap: 10px;
   font-weight: 600;
   border-radius: 8px;
-  transition: background .25s ease, box-shadow .25s ease;
+  transition: background .3s ease-out, box-shadow .3s ease-out;
 }
-.link-arrow svg { width: 22px; height: 22px; transition: transform .25s ease; }
+.link-arrow svg { width: 22px; height: 22px; transition: transform .3s ease-out; }
 /* Padded highlight via box-shadow spread so surrounding layout never shifts. */
 .link-arrow:hover { background: rgba(57, 96, 57, .1); box-shadow: 0 0 0 10px rgba(57, 96, 57, .1); }
 .link-arrow:hover svg { transform: translateX(3px); }
@@ -127,9 +127,9 @@ img { max-width: 100%; display: block; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background .25s ease;
+  transition: background .3s ease-out;
 }
-.stepper__btn:hover { background: var(--sage); }
+.stepper__btn:hover { background: var(--green); border-color: var(--green); color: var(--cream); }
 .stepper__num {
   background: var(--sage);
   border-radius: 8px;
