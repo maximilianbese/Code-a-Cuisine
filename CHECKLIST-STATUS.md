@@ -51,4 +51,13 @@ gespeichert und die Bibliothek liest live aus Firestore.
 - ✅ Gemini-Generierung (`gemini-2.5-flash`) – echte Rezepte, passend zu Eingabe/Küche
 - ✅ Firestore-Speicherung (Service-Account) aktiv
 - ✅ Bibliothek liest live aus Firestore (`/webhook/library`)
-- ✅ Webho
+- ✅ Webhook-URLs in `app-config.ts` gesetzt, CORS am Webhook freigegeben
+
+## Offen fürs Online-Stellen (Deployment)
+
+- ⏳ Frontend auf Netcup hochladen (statischer Build) — siehe `NETCUP-DEPLOY.md`
+- ⏳ n8n öffentlich erreichbar machen, damit die Generierung auch remote läuft
+  (lokal läuft es; für einen öffentlichen Link braucht n8n eine öffentliche Adresse)
+- 🟡 optional: SMTP-Credential für die Fehler-E-Mail
+
+Anleitungen: `NETCUP-DEPLOY.md`, `n8n/LOCAL-N8N.md`, `N8N-ORACLE-SETUP.md`, `n8n/N8N-SETUP.md`.
