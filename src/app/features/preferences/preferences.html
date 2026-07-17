@@ -15,7 +15,8 @@
       <p class="counts__label">How many portions you need?</p>
       <div class="stepper">
         <button class="stepper__btn" type="button" (click)="changePortions(-1)" aria-label="Fewer portions">−</button>
-        <span class="stepper__value">{{ prefs().portions }} Portions</span>
+        <span class="stepper__num">{{ prefs().portions }}</span>
+        <span class="stepper__value">Portions</span>
         <button class="stepper__btn" type="button" (click)="changePortions(1)" aria-label="More portions">+</button>
       </div>
     </div>
@@ -23,7 +24,8 @@
       <p class="counts__label">How many are cooking?</p>
       <div class="stepper">
         <button class="stepper__btn" type="button" (click)="changeCooks(-1)" aria-label="Fewer cooks">−</button>
-        <span class="stepper__value">{{ prefs().cooks }} {{ prefs().cooks === 1 ? 'Person' : 'People' }}</span>
+        <span class="stepper__num">{{ prefs().cooks }}</span>
+        <span class="stepper__value">{{ prefs().cooks === 1 ? 'Person' : 'People' }}</span>
         <button class="stepper__btn" type="button" (click)="changeCooks(1)" aria-label="More cooks">+</button>
       </div>
     </div>
@@ -33,9 +35,10 @@
     <h2 class="prefs__heading"><img class="icon" src="/icons/clock-green.svg" alt="" /> Cooking time:</h2>
     <div class="prefs__chips">
       @for (t of times; track t.value) {
-        <button class="chip chip--stacked" [class.is-active]="prefs().time === t.value" (click)="setTime(t.value)">
-          <span>{{ t.label }}</span><small>{{ t.hint }}</small>
-        </button>
+        <div class="time-opt">
+          <button class="chip" [class.is-active]="prefs().time === t.value" (click)="setTime(t.value)">{{ t.label }}</button>
+          <small class="time-opt__hint">{{ t.hint }}</small>
+        </div>
       }
     </div>
 

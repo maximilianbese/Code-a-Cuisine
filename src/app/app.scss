@@ -3,3 +3,12 @@
   width: 100%;
   overflow-x: clip;
 }
+
+/* Route transition: each screen dissolves in when its route activates,
+   mirroring the Figma prototype (pure CSS, no @angular/animations needed). */
+.app-shell > :is(app-home, app-generate, app-preferences, app-loading,
+  app-results, app-cookbook, app-recipe-detail, app-impressum, app-not-found) {
+  display: block;
+  animation: page-enter .32s ease both;
+}
+@keyframes page-enter { from { opacity: 0; } to { opacity: 1; } }

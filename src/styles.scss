@@ -19,6 +19,7 @@
   --radius-lg: 30px;
   --radius-md: 18px;
   --radius-sm: 12px;
+  --radius-btn: 5px;
   --shell-max: 1440px;
   --font: 'Quicksand', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-display: 'Ubuntu', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -58,20 +59,20 @@ img { max-width: 100%; display: block; }
   font-weight: 600;
   font-size: 16px;
   border: 0;
-  border-radius: 14px;
+  border-radius: var(--radius-btn);
   padding: 14px 28px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: background .2s ease, transform .08s ease;
+  transition: background .25s ease, transform .08s ease;
 }
 .btn:active { transform: translateY(1px); }
-.btn-cream { background: var(--cream); color: var(--green-cta); }
-.btn-cream:hover { background: #fff7e8; }
-.btn-green { background: var(--green-cta); color: var(--cream-light); }
-.btn-green:hover { background: var(--green-cta-hover); }
+.btn-cream { background: #faf0e6; color: #008000; }
+.btn-cream:hover { background: #fae0c6; }
+.btn-green { background: var(--green); color: var(--cream-light); }
+.btn-green:hover { background: #055e05; }
 .btn-block { width: 100%; }
 
 /* ---------- Chips / pills ---------- */
@@ -81,16 +82,16 @@ img { max-width: 100%; display: block; }
   font-size: 16px;
   padding: 9px 20px;
   border-radius: 999px;
-  background: var(--cream);
+  background: #faf0e6;
   color: var(--green);
   border: 2px solid transparent;
   cursor: pointer;
-  transition: border-color .15s ease, background .15s ease, color .15s ease;
+  transition: border-color .25s ease, background .25s ease, color .25s ease;
 }
-.chip:hover { border-color: var(--sage-deep); }
+.chip:hover { background: #fae0c6; }
 .chip.is-active { background: var(--green); color: var(--cream); border-color: var(--green); }
 .chip.is-static { cursor: default; }
-.chip.is-static:hover { border-color: transparent; }
+.chip.is-static:hover { background: #faf0e6; }
 
 /* ---------- Cards & surfaces ---------- */
 .card { background: var(--sage); border-radius: var(--radius-md); padding: 26px; }
@@ -102,26 +103,41 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 10px;
   font-weight: 600;
+  border-radius: 8px;
+  transition: background .25s ease, box-shadow .25s ease;
 }
-.link-arrow svg { width: 22px; height: 22px; }
+.link-arrow svg { width: 22px; height: 22px; transition: transform .25s ease; }
+/* Padded highlight via box-shadow spread so surrounding layout never shifts. */
+.link-arrow:hover { background: rgba(57, 96, 57, .1); box-shadow: 0 0 0 10px rgba(57, 96, 57, .1); }
+.link-arrow:hover svg { transform: translateX(3px); }
+/* On green surfaces the secondary button highlights with a warm peach tint (Figma: #FAE0C6 @ 20%). */
+.surface-green .link-arrow:hover { background: rgba(250, 224, 198, .2); box-shadow: 0 0 0 10px rgba(250, 224, 198, .2); }
 
 /* ---------- Stepper (+ / -) ---------- */
-.stepper { display: inline-flex; align-items: center; gap: 14px; }
+.stepper { display: inline-flex; align-items: center; gap: 12px; }
 .stepper__btn {
-  width: 44px; height: 44px;
+  width: 40px; height: 40px;
   border: 2px solid var(--green);
   background: transparent;
   color: var(--green);
-  border-radius: 11px;
+  border-radius: 6px;
   font-size: 22px;
   line-height: 1;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  transition: background .25s ease;
 }
 .stepper__btn:hover { background: var(--sage); }
-.stepper__value { font-weight: 600; min-width: 90px; }
+.stepper__num {
+  background: var(--sage);
+  border-radius: 8px;
+  padding: 3px 13px;
+  font-weight: 700;
+  color: var(--green);
+}
+.stepper__value { font-weight: 600; }
 
 /* ---------- Text inputs ---------- */
 .field {

@@ -7,8 +7,18 @@
   <div class="gen-grid">
     <section class="card form">
       <label class="form__label" for="ing-name">Ingredient</label>
-      <input id="ing-name" class="field" placeholder="e.g. Pasta"
-        [ngModel]="name()" (ngModelChange)="name.set($event)" (keyup.enter)="add()" />
+      <div class="form__field">
+        <input id="ing-name" class="field" placeholder="e.g. Pasta" autocomplete="off"
+          [ngModel]="name()" (ngModelChange)="onName($event)" (keyup.enter)="add()" />
+        @if (suggestions().length) {
+          <ul class="suggest">
+            @for (s of suggestions(); track s) {
+              <li><button class="suggest__item" type="button" (click)="pick(s)">{{ s }}</button></li>
+            }
+          </ul>
+        }
+      </div>
+      @if (error()) { <p class="form__error" role="alert">{{ error() }}</p> }
 
       <label class="form__label" for="ing-amount">Serving size</label>
       <div class="form__row">
@@ -27,6 +37,7 @@
         <ul class="list__items">
           @for (item of ingredients(); track $index) {
             <li class="list__item">
+              <span class="list__bullet" aria-hidden="true">•</span>
               <span class="list__amount">{{ item.amount }}{{ item.unit === 'piece' ? '' : item.unit }}</span>
               <span class="list__name">{{ item.name }}</span>
               <button class="list__act" type="button" (click)="edit($index)" aria-label="Edit">
@@ -44,7 +55,7 @@
     </section>
   </div>
 
-  <div class="center">
+  <div class="page__actions">
     <button class="btn btn-green next" type="button" [disabled]="!ingredients().length" (click)="next()">
       Next step
     </button>

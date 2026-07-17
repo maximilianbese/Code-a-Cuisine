@@ -16,9 +16,9 @@ export class RecipeFlowService {
   readonly preferences = signal<Preferences>(defaultPreferences());
   readonly hasIngredients = computed(() => this.ingredients().length > 0);
 
-  /** Append an ingredient to the current list. */
+  /** Add an ingredient to the top of the list (most recent first). */
   addIngredient(item: Ingredient): void {
-    this.ingredients.update((list) => [...list, item]);
+    this.ingredients.update((list) => [item, ...list]);
   }
 
   /** Remove the ingredient at the given index. */

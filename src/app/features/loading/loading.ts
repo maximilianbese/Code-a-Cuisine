@@ -1,4 +1,4 @@
-import { Component, afterNextRender, inject } from '@angular/core';
+import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin, timer } from 'rxjs';
 import { Logo } from '../../shared/logo/logo';
@@ -27,6 +27,9 @@ export class Loading {
   private readonly recipes = inject(RecipeService);
   private readonly store = inject(RecipePersistenceService);
   private readonly quota = inject(QuotaService);
+
+  /** Falls back to the shimmer card if the animation asset is missing. */
+  readonly animationFailed = signal(false);
 
   /** Kick off generation once the component has rendered. */
   constructor() {

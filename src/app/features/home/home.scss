@@ -25,52 +25,53 @@
   font-weight: 700;
   white-space: nowrap;
 }
-.hero__cta { margin-top: 44px; padding: 16px 40px; font-size: 20px; }
+.hero__cta { margin-top: 44px; padding: 16px 40px; font-size: 24px; }
 
-/* Plates pinned to the right edge, sized in vh so three always fit one screen. */
+/* Plates pinned flush to the right edge; raw SVGs, no ring/shadow around them.
+   Size is capped in px so they never overrun the text on ultra-wide screens. */
 .hero__plates {
   position: absolute;
   top: 0;
-  right: max(0px, calc((100% - var(--shell-max)) / 2));
-  height: 100%;
+  bottom: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  transform: translateX(-9%);
+  align-items: flex-end;
+  transform: translateX(22%);
   pointer-events: none;
+  z-index: 0;
 }
 .plate {
-  width: 54vh;
-  height: 54vh;
-  border-radius: 50%;
-  background: var(--sage);
-  object-fit: cover;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
+  width: clamp(300px, 44vh, 480px);
+  height: auto;
 }
-.plate--2, .plate--3 { margin-top: -19vh; }
+.plate--2, .plate--3 { margin-top: -5vh; }
 
-.hero__foot { display: flex; align-items: center; gap: 26px; font-size: 22px; }
-.hero__foot-title { font-weight: 600; }
-
+.hero__foot { display: flex; align-items: center; gap: 26px; font-size: 24px; }
+.hero__foot-title { font-weight: 700; }
+/* "Go to cookbook" secondary link: smaller and lighter than the title (Figma: 20px / 500). */
+.hero__foot .link-arrow { font-size: 20px; font-weight: 500; color: #faf0e6; }
 
 @media (max-width: 760px) {
-  .hero__plates { transform: translateX(26%); opacity: 1; }
-  .plate { width: 40vh; height: 40vh; }
-  .plate--2, .plate--3 { margin-top: -14vh; }
-  .hero__text { max-width: 62%; }
+  .hero__plates {
+    justify-content: space-between;
+    padding: 32px 0;
+    transform: translateX(50%);
+  }
+  .plate { width: 42vw; margin-top: 0; }
+  .plate--2, .plate--3 { margin-top: 0; }
+  .hero__text { max-width: 60%; }
   .hero__title { white-space: normal; }
-  .hero__foot { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .hero__foot { flex-direction: column; align-items: flex-start; gap: 10px; font-size: 20px; }
 }
 
 @media (max-width: 480px) {
   .hero__inner { padding: 24px 20px 28px; gap: 24px; }
-  .hero__text { max-width: 100%; }
-  .hero__title { font-size: clamp(36px, 13vw, 56px); }
+  .hero__text { max-width: 60%; }
+  .hero__title { font-size: clamp(36px, 12vw, 56px); }
   .hero__eyebrow { font-size: clamp(18px, 6vw, 26px); }
   .hero__cta { margin-top: 28px; padding: 14px 30px; font-size: 18px; }
-  .hero__plates { opacity: .28; transform: translateX(30%); }
-  .plate { width: 30vh; height: 30vh; }
-  .plate--2, .plate--3 { margin-top: -11vh; }
+  .plate { width: 44vw; }
   .hero__foot { font-size: 18px; }
 }

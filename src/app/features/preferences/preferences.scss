@@ -7,12 +7,14 @@
 .counts__label { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
 
 .prefs { max-width: 860px; margin: 0 auto 44px; padding: 34px 40px; }
-.prefs__heading { font-size: 22px; color: var(--green); margin: 26px 0 16px; }
+.prefs__heading { font-size: 22px; color: var(--green); margin: 26px 0 16px; display: inline-flex; align-items: center; gap: 8px; }
 .prefs__heading:first-child { margin-top: 0; }
-.prefs__chips { display: flex; flex-wrap: wrap; gap: 14px; }
+.prefs__chips { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
+.prefs__chips .chip { font-size: 18px; padding: 8px 22px; }
 
-.chip--stacked { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.15; }
-.chip--stacked small { font-weight: 500; opacity: .75; font-size: 16px; }
+/* Cooking-time option: pill with its hint rendered below, outside the button. */
+.time-opt { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
+.time-opt__hint { font-size: 15px; color: var(--green); opacity: .8; }
 
 .generate { padding: 16px 40px; font-size: 18px; }
 .generate:disabled { opacity: .5; cursor: not-allowed; }
