@@ -5,24 +5,28 @@
 .results__hero { display: flex; gap: 40px; align-items: center; margin-bottom: 44px; }
 .results__title { font-size: 52px; font-weight: 700; margin-bottom: 16px; }
 .results__lead { font-size: 19px; max-width: 46ch; margin-bottom: 18px; }
+/* The backend returns preference keys lowercase ("italian"), Figma shows them
+   capitalised — do it in CSS so the raw value stays untouched. */
 .results__tags { display: flex; gap: 12px; }
+.results__tags .chip { text-transform: capitalize; }
 .results__art {
   flex: none; width: 360px; height: auto;
   border-radius: var(--radius-md);
 }
 
-.results__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.results__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+/* Figma: opaque #DBE0DB card, 20px radius, 32px/24px padding. */
 .rcard {
-  background: var(--sage); color: var(--ink);
-  border-radius: var(--radius-md); padding: 26px;
+  background: var(--card-on-green); color: var(--ink);
+  border-radius: var(--radius-md); padding: 32px 24px;
   display: flex; flex-direction: column; min-height: 250px;
 }
-.rcard__head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.rcard__head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .rcard__icon { width: 30px; height: 26px; object-fit: contain; }
-.rcard__eyebrow { color: var(--green); font-weight: 600; margin: 0; }
-.rcard__title { font-size: 24px; color: var(--green-heading); margin-bottom: 14px; }
+.rcard__eyebrow { color: var(--green-heading); font-size: var(--fs-label); font-weight: 600; margin: 0; }
+.rcard__title { font-size: var(--fs-card-head); color: var(--green-heading); margin-bottom: 14px; }
 .rcard__time { color: var(--green); margin-bottom: 22px; display: flex; align-items: center; gap: 8px; }
-.rcard__view { align-self: flex-start; margin-top: auto; padding: 12px 30px; }
+.rcard__view { align-self: flex-start; margin-top: auto; padding: 12px 30px; font-size: var(--fs-h6); }
 
 .results__foot { display: flex; justify-content: flex-end; margin-top: 40px; }
 .results__foot .link-arrow { cursor: pointer; font-size: 19px; }

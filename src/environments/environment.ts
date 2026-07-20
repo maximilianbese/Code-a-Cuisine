@@ -1,4 +1,4 @@
-import { AppConfig } from '../app/core/config/app-config';
+import type { AppConfig } from '../app/core/config/app-config';
 
 /**
  * Production configuration. Replace the placeholders with the public n8n

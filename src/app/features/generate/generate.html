@@ -16,13 +16,17 @@
         <div class="form__col form__col--amount">
           <label class="form__label" for="ing-amount">Serving size</label>
           <div class="form__row">
-            <button class="step-btn" type="button" (click)="step(-1)"
-              [disabled]="amount() <= minAmount" aria-label="Decrease serving size">−</button>
+            <button class="stepper__btn" type="button" (click)="step(-1)"
+              [disabled]="amount() <= minAmount" aria-label="Decrease serving size">
+              <app-step-icon kind="minus" />
+            </button>
             <input id="ing-amount" class="field field--num" type="number" inputmode="numeric"
               [min]="minAmount" [max]="maxAmount()" step="1"
               [ngModel]="amount()" (ngModelChange)="onAmount($event)" (keyup.enter)="submit()" />
-            <button class="step-btn" type="button" (click)="step(1)"
-              [disabled]="amount() >= maxAmount()" aria-label="Increase serving size">+</button>
+            <button class="stepper__btn" type="button" (click)="step(1)"
+              [disabled]="amount() >= maxAmount()" aria-label="Increase serving size">
+              <app-step-icon kind="plus" />
+            </button>
             <select class="field field--unit" [ngModel]="unit()" (ngModelChange)="onUnit($event)"
               aria-label="Unit">
               @for (u of units; track u) { <option [value]="u">{{ u }}</option> }

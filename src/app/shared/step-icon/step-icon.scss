@@ -1,0 +1,8 @@
+:host { display: inline-flex; line-height: 0; }
+
+/* Sized by the surrounding button so one component serves every stepper. */
+.step-icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

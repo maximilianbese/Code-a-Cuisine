@@ -14,19 +14,31 @@
     <div class="counts__group">
       <p class="counts__label">How many portions you need?</p>
       <div class="stepper">
-        <button class="stepper__btn" type="button" (click)="changePortions(-1)" aria-label="Fewer portions">−</button>
+        <button class="stepper__btn" type="button" (click)="changePortions(-1)"
+          [disabled]="prefs().portions <= minPortions" aria-label="Fewer portions">
+          <app-step-icon kind="minus" />
+        </button>
         <span class="stepper__num">{{ prefs().portions }}</span>
         <span class="stepper__value">Portions</span>
-        <button class="stepper__btn" type="button" (click)="changePortions(1)" aria-label="More portions">+</button>
+        <button class="stepper__btn" type="button" (click)="changePortions(1)"
+          [disabled]="prefs().portions >= maxPortions" aria-label="More portions">
+          <app-step-icon kind="plus" />
+        </button>
       </div>
     </div>
     <div class="counts__group">
       <p class="counts__label">How many are cooking?</p>
       <div class="stepper">
-        <button class="stepper__btn" type="button" (click)="changeCooks(-1)" aria-label="Fewer cooks">−</button>
+        <button class="stepper__btn" type="button" (click)="changeCooks(-1)"
+          [disabled]="prefs().cooks <= minCooks" aria-label="Fewer cooks">
+          <app-step-icon kind="minus" />
+        </button>
         <span class="stepper__num">{{ prefs().cooks }}</span>
         <span class="stepper__value">{{ prefs().cooks === 1 ? 'Person' : 'People' }}</span>
-        <button class="stepper__btn" type="button" (click)="changeCooks(1)" aria-label="More cooks">+</button>
+        <button class="stepper__btn" type="button" (click)="changeCooks(1)"
+          [disabled]="prefs().cooks >= maxCooks" aria-label="More cooks">
+          <app-step-icon kind="plus" />
+        </button>
       </div>
     </div>
   </div>

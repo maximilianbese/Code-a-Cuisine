@@ -1,4 +1,4 @@
-import { AppConfig } from '../app/core/config/app-config';
+import type { AppConfig } from '../app/core/config/app-config';
 
 /** Local development configuration – talks to the n8n container on localhost. */
 export const environment: AppConfig = {

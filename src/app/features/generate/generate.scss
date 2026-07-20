@@ -50,16 +50,8 @@
   color: var(--green); text-decoration: underline;
 }
 
-/* Small square −/+ controls next to the number field. */
-.step-btn {
-  width: 32px; height: 32px; flex: none;
-  border: 2px solid var(--green); background: transparent; color: var(--green);
-  border-radius: 6px; font-size: 18px; line-height: 1; cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center;
-  transition: background .3s ease-out, color .3s ease-out;
-}
-.step-btn:hover:not(:disabled) { background: var(--green); color: var(--cream); }
-.step-btn:disabled { opacity: .35; cursor: not-allowed; }
+/* The −/+ controls reuse the global .stepper__btn styling from styles.scss. */
+.form__row .stepper__btn { flex: none; }
 
 /* Plain "+" glyph, no filled button box (matches design). */
 .add-btn {

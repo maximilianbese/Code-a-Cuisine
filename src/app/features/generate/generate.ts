@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Logo } from '../../shared/logo/logo';
+import { StepIcon } from '../../shared/step-icon/step-icon';
 import { RecipeFlowService } from '../../core/services/recipe-flow.service';
 import {
   INGREDIENT_UNITS, Ingredient, MIN_AMOUNT, clampAmount, formatAmount, isValidAmount, maxAmountFor,
@@ -11,7 +12,7 @@ import { INGREDIENT_NAMES } from '../../core/data/ingredient-names';
 /** Step 1 – capture the ingredients the user already has. */
 @Component({
   selector: 'app-generate',
-  imports: [FormsModule, Logo],
+  imports: [FormsModule, Logo, StepIcon],
   templateUrl: './generate.html',
   styleUrl: './generate.scss',
 })

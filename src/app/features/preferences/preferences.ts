@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Logo } from '../../shared/logo/logo';
 import { Dialog } from '../../shared/dialog/dialog';
+import { StepIcon } from '../../shared/step-icon/step-icon';
 import { RecipeFlowService } from '../../core/services/recipe-flow.service';
 import { QuotaService, DAILY_QUOTA } from '../../core/services/quota.service';
 import { CuisineOption, DietOption, TimeOption } from '../../core/models/preferences.model';
@@ -9,10 +10,16 @@ import { CuisineOption, DietOption, TimeOption } from '../../core/models/prefere
 /** One selectable preference chip: its value, its label and an optional hint. */
 interface Option<T> { value: T; label: string; hint?: string; }
 
+/** Accepted range for the portions stepper. */
+const PORTIONS_RANGE = { min: 1, max: 12 } as const;
+
+/** Accepted range for the cooks stepper. */
+const COOKS_RANGE = { min: 1, max: 3 } as const;
+
 /** Step 2 – portions, cooks and taste preferences. */
 @Component({
   selector: 'app-preferences',
-  imports: [RouterLink, Logo, Dialog],
+  imports: [RouterLink, Logo, Dialog, StepIcon],
   templateUrl: './preferences.html',
   styleUrl: './preferences.scss',
 })
@@ -26,6 +33,14 @@ export class PreferencesPage {
   readonly remaining = this.quota.remaining;
   /** Daily generation limit shown alongside the remaining count. */
   readonly dailyQuota = DAILY_QUOTA;
+  /** Lowest selectable number of portions; disables the minus button. */
+  readonly minPortions = PORTIONS_RANGE.min;
+  /** Highest selectable number of portions; disables the plus button. */
+  readonly maxPortions = PORTIONS_RANGE.max;
+  /** Lowest selectable number of cooks; disables the minus button. */
+  readonly minCooks = COOKS_RANGE.min;
+  /** Highest selectable number of cooks; disables the plus button. */
+  readonly maxCooks = COOKS_RANGE.max;
   /** Controls visibility of the "not enough ingredients" dialog. */
   readonly showDialog = signal(false);
   /** Controls visibility of the "daily quota reached" dialog. */
@@ -49,14 +64,16 @@ export class PreferencesPage {
     { value: 'keto', label: 'Keto' }, { value: 'none', label: 'No preferences' },
   ];
 
-  /** Increase or decrease the number of portions (clamped to 1–12). */
+  /** Increase or decrease the number of portions, clamped to its range. */
   changePortions(delta: number): void {
-    this.flow.updatePreferences({ portions: clamp(this.prefs().portions + delta, 1, 12) });
+    const next = clamp(this.prefs().portions + delta, PORTIONS_RANGE.min, PORTIONS_RANGE.max);
+    this.flow.updatePreferences({ portions: next });
   }
 
-  /** Increase or decrease the number of cooks (clamped to 1–3). */
+  /** Increase or decrease the number of cooks, clamped to its range. */
   changeCooks(delta: number): void {
-    this.flow.updatePreferences({ cooks: clamp(this.prefs().cooks + delta, 1, 3) });
+    const next = clamp(this.prefs().cooks + delta, COOKS_RANGE.min, COOKS_RANGE.max);
+    this.flow.updatePreferences({ cooks: next });
   }
 
   /** Select the preferred cooking-time bracket. */
