@@ -1,5 +1,6 @@
 import { CuisineCategory, Recipe } from '../models/recipe.model';
 
+/** Seed recipe used as the base for the demo suggestions. */
 const PASTA: Recipe = {
   id: 'pasta-spinach-cherry',
   index: 1,
@@ -35,6 +36,7 @@ const PASTA: Recipe = {
   ],
 };
 
+/** Second demo suggestion, a variation on the seed recipe. */
 const SHRIMP: Recipe = {
   ...PASTA,
   id: 'creamy-garlic-shrimp-pasta',
@@ -45,6 +47,7 @@ const SHRIMP: Recipe = {
   nutrition: { calories: 710, protein: 34, fat: 28, carbs: 61 },
 };
 
+/** Third demo suggestion, a variation on the seed recipe. */
 const TRAPANESE: Recipe = {
   ...PASTA,
   id: 'pasta-alla-trapanese',

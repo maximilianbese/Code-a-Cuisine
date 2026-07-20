@@ -6,6 +6,7 @@ import { RecipeFlowService } from '../../core/services/recipe-flow.service';
 import { QuotaService, DAILY_QUOTA } from '../../core/services/quota.service';
 import { CuisineOption, DietOption, TimeOption } from '../../core/models/preferences.model';
 
+/** One selectable preference chip: its value, its label and an optional hint. */
 interface Option<T> { value: T; label: string; hint?: string; }
 
 /** Step 2 – portions, cooks and taste preferences. */
@@ -19,6 +20,7 @@ export class PreferencesPage {
   private readonly flow = inject(RecipeFlowService);
   private readonly quota = inject(QuotaService);
   private readonly router = inject(Router);
+  /** The preference selection shared across the generation flow. */
   readonly prefs = this.flow.preferences;
   /** Generations the user has left today. */
   readonly remaining = this.quota.remaining;
@@ -29,16 +31,19 @@ export class PreferencesPage {
   /** Controls visibility of the "daily quota reached" dialog. */
   readonly showQuota = signal(false);
 
+  /** Selectable cooking-time brackets with their duration hints. */
   readonly times: Option<TimeOption>[] = [
     { value: 'quick', label: 'Quick', hint: 'up to 20min' },
     { value: 'medium', label: 'Medium', hint: '25-45min' },
     { value: 'complex', label: 'Complex', hint: 'over 45min' },
   ];
+  /** Selectable cuisine styles. */
   readonly cuisines: Option<CuisineOption>[] = [
     { value: 'german', label: 'German' }, { value: 'italian', label: 'Italian' },
     { value: 'indian', label: 'Indian' }, { value: 'japanese', label: 'Japanese' },
     { value: 'gourmet', label: 'Gourmet' }, { value: 'fusion', label: 'Fusion' },
   ];
+  /** Selectable dietary restrictions. */
   readonly diets: Option<DietOption>[] = [
     { value: 'vegetarian', label: 'Vegetarian' }, { value: 'vegan', label: 'Vegan' },
     { value: 'keto', label: 'Keto' }, { value: 'none', label: 'No preferences' },

@@ -48,10 +48,22 @@
 }
 .plate--2, .plate--3 { margin-top: -5vh; }
 
-.hero__foot { display: flex; align-items: center; gap: 26px; font-size: 24px; }
+/* Sits above the plate column so the links stay readable at every width. */
+.hero__foot { position: relative; z-index: 1; display: flex; align-items: center; gap: 26px; font-size: 24px; }
 .hero__foot-title { font-weight: 700; }
 /* "Go to cookbook" secondary link: smaller and lighter than the title (Figma: 20px / 500). */
 .hero__foot .link-arrow { font-size: 20px; font-weight: 500; color: #faf0e6; }
+
+/* Tablet: the plate column starts crowding the headline well before the mobile
+   layout would kick in, so pull the plates further off-canvas and cap the text
+   width here already. Without this the title and the footer link run underneath
+   the plates between ~700px and ~1024px. */
+@media (max-width: 1024px) {
+  .hero__plates { transform: translateX(38%); }
+  .plate { width: clamp(260px, 38vh, 380px); }
+  .hero__title { white-space: normal; }
+  .hero__text, .hero__foot { max-width: 62%; }
+}
 
 /* Mobile: plates form one continuous column flush to the right edge, cut to
    ~half; text sits on the left. Mirrors the Figma mobile frame. */
@@ -63,7 +75,7 @@
   /* Sized by viewport height so three plates always fill the column top-to-bottom. */
   .plate { width: 34vh; margin-top: 0; }
   .plate--2, .plate--3 { margin-top: -2vh; }
-  .hero__text { max-width: 58%; }
+  .hero__text, .hero__foot { max-width: 58%; }
   .hero__title { white-space: normal; }
   .hero__foot { flex-direction: column; align-items: flex-start; gap: 10px; font-size: 20px; }
 }
@@ -71,8 +83,9 @@
 @media (max-width: 480px) {
   .hero__inner { padding: 24px 20px 28px; gap: 24px; }
   .hero__text { max-width: 58%; }
-  .hero__title { font-size: clamp(40px, 12vw, 56px); }
-  .hero__eyebrow { font-size: clamp(20px, 6vw, 26px); }
+  /* Figma "Mob. H1" 64/72 and "Mob. H3" 24 for the eyebrow. */
+  .hero__title { font-size: clamp(40px, 13vw, var(--fs-h1-mob)); line-height: 1.125; }
+  .hero__eyebrow { font-size: clamp(18px, 6vw, var(--fs-h3-mob)); }
   .hero__cta { margin-top: 28px; padding: 14px 30px; font-size: 18px; }
   .plate { width: 37vh; }
   .hero__foot { font-size: 18px; }

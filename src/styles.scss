@@ -1,28 +1,45 @@
 /* Code à Cuisine – global design tokens & reusable styles */
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&display=swap');
 
+/* Colours mirror the Figma library "Rezepten" 1:1. Do not hand-tune these. */
 :root {
-  --green: #396039;
-  --green-deep: #2f5030;
-  --green-heading: #3f7a3c;
-  --green-cta: #4c7a34;
-  --green-cta-hover: #416a2c;
-  --cream: #f4eede;
-  --cream-light: #fbf8ef;
-  --sage: #dbe4d3;
-  --sage-deep: #c9d6bf;
-  --beige-input: #ece3cf;
+  --green: #396039;          /* Rezepten/olive green  */
+  --green-deep: #10310b;     /* Rezepten/Green dark   */
+  --green-heading: #1e5515;  /* Rezepten/Middle green */
+  --green-cta: #396039;      /* primary button fill   */
+  --green-cta-hover: #10310b;
+  --cream: #faf0e6;          /* Rezepten/cremy        */
+  --cream-light: #fdf8f0;
+  /* Card surface in Figma is the olive green at 30 % over the white page. */
+  --sage: rgba(57, 96, 57, .3);
+  --sage-deep: rgba(57, 96, 57, .45);
+  --beige-input: #faf0e6;
   --ink: #2b2b2b;
   --muted: #6d7a68;
   --white: #ffffff;
 
   --radius-lg: 30px;
-  --radius-md: 18px;
+  --radius-md: 20px;         /* Figma card radius */
   --radius-sm: 12px;
   --radius-btn: 5px;
   --shell-max: 1440px;
+  /* Figma content column inside the 1440px frame (577 + 32 + 478). */
+  --content-max: 1087px;
   --font: 'Quicksand', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-display: 'Ubuntu', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  /* Figma text styles "recipe generator" (desktop) with their mobile counterparts. */
+  --fs-h1: 104px;   --fs-h1-mob: 64px;
+  --fs-h2: 54px;    --fs-h2-mob: 32px;
+  --fs-h3: 48px;    --fs-h3-mob: 24px;
+  --fs-h4: 40px;    --fs-h4-mob: 18px;
+  --fs-card-head: 28px;
+  --fs-h5: 24px;
+  --fs-button: 24px; --fs-button-mob: 16px;
+  --fs-label: 20px;
+  --fs-h6: 18px;
+  --fs-body: 16px;
+  --fs-small: 14px;
 }
 
 * { box-sizing: border-box; }
@@ -57,10 +74,11 @@ img { max-width: 100%; display: block; }
 .btn {
   font-family: var(--font);
   font-weight: 600;
-  font-size: 16px;
+  /* Figma "Button Text" 24/Auto with 16px/26px padding and a 10px gap. */
+  font-size: var(--fs-button);
   border: 0;
   border-radius: var(--radius-btn);
-  padding: 14px 28px;
+  padding: 16px 26px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -71,9 +89,11 @@ img { max-width: 100%; display: block; }
 .btn:active { transform: translateY(1px); }
 .btn-cream { background: #faf0e6; color: #008000; }
 .btn-cream:hover { background: #fae0c6; }
-.btn-green { background: var(--green); color: var(--cream-light); }
-.btn-green:hover { background: #055e05; }
+.btn-green { background: var(--green-cta); color: var(--cream); }
+.btn-green:hover { background: var(--green-cta-hover); }
 .btn-block { width: 100%; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn:disabled:hover { background: var(--green-cta); }
 
 /* ---------- Chips / pills ---------- */
 .chip {
@@ -94,7 +114,7 @@ img { max-width: 100%; display: block; }
 .chip.is-static:hover { background: #faf0e6; }
 
 /* ---------- Cards & surfaces ---------- */
-.card { background: var(--sage); border-radius: var(--radius-md); padding: 26px; }
+.card { background: var(--sage); border-radius: var(--radius-md); padding: 24px; }
 .surface-green { background: var(--green); color: var(--cream); }
 
 /* ---------- Links with arrow ---------- */
@@ -170,6 +190,17 @@ img { max-width: 100%; display: block; }
   height: auto;
 }
 
+/* ---------- Inline notice (e.g. demo data while the backend is down) ------- */
+.notice {
+  background: var(--cream);
+  color: var(--green-deep);
+  border-left: 4px solid var(--green);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  font-size: var(--fs-body);
+  max-width: 72ch;
+}
+
 /* ---------- Utility ---------- */
 .muted { color: var(--muted); }
 .center { text-align: center; }
@@ -183,9 +214,15 @@ img { max-width: 100%; display: block; }
   vertical-align: -0.15em;
 }
 
+@media (max-width: 1024px) {
+  .btn { font-size: 20px; padding: 14px 24px; }
+  .chip { font-size: 15px; }
+}
+
 @media (max-width: 720px) {
   .container { padding: 0 20px; }
-  .btn { padding: 13px 22px; }
+  /* Figma "Mob. Button text" 16/Auto. */
+  .btn { font-size: var(--fs-button-mob); padding: 13px 22px; }
 }
 
 @media (max-width: 360px) {

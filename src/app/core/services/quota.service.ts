@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 
 /** Recipe generations allowed per browser and day (frontend guard). */
 export const DAILY_QUOTA = 3;
+/** localStorage key holding the current day's generation count. */
 const STORAGE_KEY = 'cac-quota';
 
 /** Persisted quota record for a single day. */

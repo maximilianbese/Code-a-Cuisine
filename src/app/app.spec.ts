@@ -1,23 +1,22 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { App } from './app';
 
+/** Compile the root component and return a fresh fixture for one test. */
+async function createFixture(): Promise<ComponentFixture<App>> {
+  await TestBed.configureTestingModule({ imports: [App] }).compileComponents();
+  return TestBed.createComponent(App);
+}
+
 describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [App],
-    }).compileComponents();
+  it('creates the root component', async () => {
+    const fixture = await createFixture();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it('should render title', async () => {
-    const fixture = TestBed.createComponent(App);
+  it('renders the router outlet shell', async () => {
+    const fixture = await createFixture();
     await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, code-a-cuisine');
+    const shell = (fixture.nativeElement as HTMLElement).querySelector('.app-shell');
+    expect(shell?.querySelector('router-outlet')).toBeTruthy();
   });
 });

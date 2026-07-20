@@ -12,13 +12,21 @@ const MIN_GRAMS_PER_PORTION = 100;
 /** Holds the multi-step generation state (ingredients + preferences). */
 @Injectable({ providedIn: 'root' })
 export class RecipeFlowService {
+  /** Ingredients the user entered in step 1, most recent first. */
   readonly ingredients = signal<Ingredient[]>([]);
+  /** Portions, cooks and taste preferences chosen in step 2. */
   readonly preferences = signal<Preferences>(defaultPreferences());
+  /** True as soon as at least one ingredient has been added. */
   readonly hasIngredients = computed(() => this.ingredients().length > 0);
 
   /** Add an ingredient to the top of the list (most recent first). */
   addIngredient(item: Ingredient): void {
     this.ingredients.update((list) => [item, ...list]);
+  }
+
+  /** Overwrite the ingredient at the given index, keeping its position. */
+  replaceIngredient(index: number, item: Ingredient): void {
+    this.ingredients.update((list) => list.map((old, i) => (i === index ? item : old)));
   }
 
   /** Remove the ingredient at the given index. */

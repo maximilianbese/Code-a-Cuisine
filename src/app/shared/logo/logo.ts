@@ -9,7 +9,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './logo.scss',
 })
 export class Logo {
+  /** Colour variant: "light" for green surfaces, "dark" for white ones. */
   readonly variant = input<'dark' | 'light'>('dark');
+  /** Asset path of the logo file matching the selected variant. */
   readonly src = computed(() =>
     this.variant() === 'light' ? '/assets/logo-light.svg' : '/assets/logo-dark.svg',
   );

@@ -23,8 +23,12 @@ type Macro = 'protein' | 'fat' | 'carbs';
 export class RecipeDetail {
   private readonly route = inject(ActivatedRoute);
   private readonly service = inject(RecipeService);
+  /** The recipe resolved from the route, or undefined while it is missing. */
   readonly recipe = signal<Recipe | undefined>(undefined);
+  /** Whether the user has hearted this recipe in the current session. */
   readonly liked = signal(false);
+  /** True when n8n was unreachable and this is a local demo recipe. */
+  readonly isDemo = this.service.isDemo;
   /** When true, nutrition is shown for the whole recipe instead of per portion. */
   readonly showTotal = signal(false);
 

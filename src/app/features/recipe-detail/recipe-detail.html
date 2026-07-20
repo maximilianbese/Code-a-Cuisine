@@ -9,6 +9,12 @@
       </a>
     </header>
 
+    @if (isDemo()) {
+      <p class="notice" role="status">
+        Example recipe — our recipe AI is not reachable right now.
+      </p>
+    }
+
     <section class="head">
       <div class="head__main">
         <p class="head__time">

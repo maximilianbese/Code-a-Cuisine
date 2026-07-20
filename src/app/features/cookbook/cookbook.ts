@@ -18,6 +18,7 @@ const PAGE_SIZE = 20;
 export class Cookbook {
   private readonly service = inject(RecipeService);
   private readonly api = inject(RecipeApiService);
+  /** Cuisine tiles used to group the library grid. */
   readonly categories = this.service.getCategories();
 
   /** All library recipes; seeded with mock data until the live fetch resolves. */
@@ -29,7 +30,7 @@ export class Cookbook {
 
   /** Load the recipe library from the backend once the view is created. */
   constructor() {
-    this.api.getLibrary().subscribe((recipes) => this.all.set(recipes));
+    this.api.getLibrary().subscribe((result) => this.all.set(result.recipes));
   }
 
   /** Recipes sorted by likes, descending, for the cookbook highlights. */

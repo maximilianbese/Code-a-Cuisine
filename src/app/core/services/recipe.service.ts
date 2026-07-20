@@ -6,6 +6,10 @@ import { CUISINE_CATEGORIES, RESULT_RECIPES } from './recipe-data';
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
   private readonly _results = signal<Recipe[]>(RESULT_RECIPES);
+  private readonly _demo = signal(false);
+
+  /** True while the shown recipes come from local demo data, not from n8n. */
+  readonly isDemo = this._demo.asReadonly();
 
   /** The most recently generated recipe suggestions. */
   getResults(): Recipe[] {
@@ -13,9 +17,10 @@ export class RecipeService {
   }
 
   /** Replace the current results (e.g. after a generation run). */
-  setResults(recipes: Recipe[]): void {
+  setResults(recipes: Recipe[], demo = false): void {
     const list = Array.isArray(recipes) ? recipes : [];
     this._results.set(list.length ? list : RESULT_RECIPES);
+    this._demo.set(demo || !list.length);
   }
 
   /** Look up a single recipe by its id. */

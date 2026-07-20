@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+/** Lazily loaded routes for the recipe flow, the cookbook and the legal pages. */
 export const routes: Routes = [
   { path: '', loadComponent: () => import('./features/home/home').then((m) => m.Home) },
   { path: 'generate', loadComponent: () => import('./features/generate/generate').then((m) => m.Generate) },

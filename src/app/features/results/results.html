@@ -14,6 +14,13 @@
       <img class="results__art" src="/images/robot-arm.svg" alt="" aria-hidden="true" />
     </div>
 
+    @if (isDemo()) {
+      <p class="notice" role="status">
+        Our recipe AI is not reachable right now, so these are example recipes built from your
+        ingredients and settings. Please try again in a moment for freshly generated ones.
+      </p>
+    }
+
     <div class="results__grid">
       @for (recipe of recipes; track recipe.id) {
         <article class="rcard">
