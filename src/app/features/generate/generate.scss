@@ -24,14 +24,15 @@
 
 .form { padding: 25px 24px; display: flex; flex-direction: column; }
 .form--editing { outline: 2px solid var(--green); outline-offset: 2px; }
-.form__cols { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+/* Figma keeps "Ingredient" and "Serving size" side by side inside the card. */
+.form__cols { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
 .form__col { display: flex; flex-direction: column; }
-.form__col--name { flex: 1 1 240px; min-width: 0; }
+.form__col--name { flex: 1 1 220px; min-width: 0; }
 .form__col--amount { flex: 0 0 auto; }
 .form__label { display: block; font-weight: 600; font-size: var(--fs-label); margin: 0 0 10px; }
-.form__row { display: flex; align-items: center; gap: 8px; }
-.field--num { width: 84px; text-align: center; padding-left: 8px; padding-right: 8px; }
-.field--unit { width: 108px; }
+.form__row { display: flex; align-items: center; gap: 10px; }
+.field--num { width: 72px; text-align: center; padding-left: 8px; padding-right: 8px; }
+.field--unit { width: 98px; padding-left: 14px; padding-right: 10px; }
 
 /* Autocomplete: plain suggestion list under the input, no surrounding box. */
 .suggest { list-style: none; margin: 8px 0 0; padding: 0 4px; display: flex; flex-direction: column; }
@@ -49,9 +50,6 @@
   font-family: var(--font); font-weight: 600; font-size: 15px;
   color: var(--green); text-decoration: underline;
 }
-
-/* The −/+ controls reuse the global .stepper__btn styling from styles.scss. */
-.form__row .stepper__btn { flex: none; }
 
 /* Plain "+" glyph, no filled button box (matches design). */
 .add-btn {

@@ -43,6 +43,15 @@ export class RecipeDetail {
     this.recipe.set(this.service.getById(id) ?? this.service.getResults()[0]);
   }
 
+  /**
+   * Label for the diet chip. The backend may echo the raw preference key, so
+   * "none" is dropped instead of being shown as a meaningless chip.
+   */
+  dietLabel(diet: string): string {
+    const value = (diet ?? '').trim();
+    return value.toLowerCase() === 'none' ? '' : value;
+  }
+
   /** Build a 1-based list of chef numbers for the given cook count. */
   chefs(count: number): number[] {
     return Array.from({ length: count }, (_, i) => i + 1);

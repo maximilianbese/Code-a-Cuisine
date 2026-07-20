@@ -28,7 +28,7 @@
       </div>
       <div class="head__meta">
         <div class="head__tags">
-          <span class="chip is-static">{{ r.diet }}</span>
+          @if (dietLabel(r.diet); as diet) { <span class="chip is-static">{{ diet }}</span> }
           <span class="chip is-static">{{ r.timeLabel }}</span>
           <span class="chip is-static"><img class="icon" src="/assets/favorite.svg" alt="Likes" /> {{ r.likes }}</span>
         </div>

@@ -20,7 +20,10 @@
 .chef--2 { background: #f1d9c4; color: #a2542a; }
 
 .head__meta { text-align: right; min-width: 260px; }
+/* Cuisine/diet/time values arrive lowercase from the backend; Figma shows them
+   capitalised, so normalise on display rather than mutating the data. */
 .head__tags { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 10px; }
+.head__tags .chip:not(:last-child) { text-transform: capitalize; }
 .nutri__label { font-weight: 600; margin-bottom: 6px; }
 .nutri__toggle { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 10px; }
 .nutri__toggle .chip { font-size: 16px; padding: 6px 14px; }

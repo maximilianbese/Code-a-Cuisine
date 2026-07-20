@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Logo } from '../../shared/logo/logo';
-import { StepIcon } from '../../shared/step-icon/step-icon';
 import { RecipeFlowService } from '../../core/services/recipe-flow.service';
 import {
   INGREDIENT_UNITS, Ingredient, MIN_AMOUNT, clampAmount, formatAmount, isValidAmount, maxAmountFor,
@@ -12,7 +11,7 @@ import { INGREDIENT_NAMES } from '../../core/data/ingredient-names';
 /** Step 1 – capture the ingredients the user already has. */
 @Component({
   selector: 'app-generate',
-  imports: [FormsModule, Logo, StepIcon],
+  imports: [FormsModule, Logo],
   templateUrl: './generate.html',
   styleUrl: './generate.scss',
 })
@@ -57,6 +56,12 @@ export class Generate {
   /** Human-readable reason why the current input cannot be submitted. */
   readonly hint = computed(() => this.hintFor(this.name(), this.amount(), this.unit()));
 
+  /**
+   * Reason the amount is rejected, shown inline. The name is only complained
+   * about on submit, but a bad amount is worth flagging straight away.
+   */
+  readonly amountHint = computed(() => amountMessage(this.amount(), this.unit()));
+
   /** Clear the validation error while the user edits the name. */
   onName(value: string): void {
     this.name.set(value);
@@ -73,12 +78,6 @@ export class Generate {
   onUnit(value: string): void {
     this.unit.set(value);
     this.amount.set(clampAmount(this.amount(), value));
-    this.error.set('');
-  }
-
-  /** Nudge the amount by one step, staying inside the unit's range. */
-  step(delta: number): void {
-    this.amount.set(clampAmount(this.amount() + delta, this.unit()));
     this.error.set('');
   }
 
@@ -147,12 +146,8 @@ export class Generate {
 
   /** Return the message explaining why the input is invalid, or empty string. */
   private hintFor(name: string, amount: number, unit: string): string {
-    const max = maxAmountFor(unit);
     if (!this.canonical(name)) return 'Please choose an ingredient from the list.';
-    if (!Number.isFinite(amount) || !Number.isInteger(amount)) return 'Enter a whole number.';
-    if (amount < MIN_AMOUNT) return `The amount has to be at least ${MIN_AMOUNT}.`;
-    if (amount > max) return `That is a lot — please stay at ${max} ${unit} or below.`;
-    return '';
+    return amountMessage(amount, unit);
   }
 
   /** Return the canonical spelling of a known ingredient, or empty string. */
@@ -160,4 +155,13 @@ export class Generate {
     const query = value.trim().toLowerCase();
     return INGREDIENT_NAMES.find((n) => n.toLowerCase() === query) ?? '';
   }
+}
+
+/** Explain why an amount is rejected for its unit, or return an empty string. */
+function amountMessage(amount: number, unit: string): string {
+  const max = maxAmountFor(unit);
+  if (!Number.isFinite(amount) || !Number.isInteger(amount)) return 'Enter a whole number.';
+  if (amount < MIN_AMOUNT) return `The amount has to be at least ${MIN_AMOUNT}.`;
+  if (amount > max) return `That is a lot — please stay at ${max} ${unit} or below.`;
+  return '';
 }
