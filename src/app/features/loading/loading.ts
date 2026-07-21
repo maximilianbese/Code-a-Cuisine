@@ -7,7 +7,7 @@ import { RecipeApiService, RecipeResult } from '../../core/services/recipe-api.s
 import { RecipeService } from '../../core/services/recipe.service';
 import { RecipePersistenceService } from '../../core/services/recipe-persistence.service';
 import { QuotaService } from '../../core/services/quota.service';
-import { GenerateRequest } from '../../core/models/generate-request.model';
+import { GenerateRequest, RECIPE_LANGUAGE } from '../../core/models/generate-request.model';
 
 /** Minimum time the interstitial stays visible to bridge the wait. */
 const MIN_VISIBLE_MS = 2500;
@@ -44,7 +44,11 @@ export class Loading {
 
   /** Assemble the JSON payload from the collected flow state. */
   private buildRequest(): GenerateRequest {
-    return { ingredients: this.flow.ingredients(), preferences: this.flow.preferences() };
+    return {
+      ingredients: this.flow.ingredients(),
+      preferences: this.flow.preferences(),
+      language: RECIPE_LANGUAGE,
+    };
   }
 
   /** Persist and display the generated recipes. */

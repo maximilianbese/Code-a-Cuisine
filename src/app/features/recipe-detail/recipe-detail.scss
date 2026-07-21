@@ -24,49 +24,92 @@
    capitalised, so normalise on display rather than mutating the data. */
 .head__tags { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 10px; }
 .head__tags .chip:not(:last-child) { text-transform: capitalize; }
-.nutri__label { font-weight: 600; margin-bottom: 6px; }
-.nutri__toggle { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 10px; }
-.nutri__toggle .chip { font-size: 16px; padding: 6px 14px; }
+/* The card itself is cream, so the default cream chip fill would vanish on it —
+   the design uses the pale sage variant here instead. */
+.head__tags .chip { background: var(--sage); font-size: 15px; padding: 5px 14px; }
+.head__tags .chip:hover { background: var(--sage); }
+.nutri__label { font-weight: 600; font-size: 15px; color: var(--muted); margin-bottom: 6px; }
 .nutri { display: flex; gap: 18px; justify-content: flex-end; }
 .nutri__cell { display: flex; flex-direction: column; }
 .nutri__cell span { color: var(--muted); font-size: 16px; }
 
-.banner--img { max-height: 84px; object-fit: cover; }
+/* Section banner: in Figma this is a cream bar carrying a centred heading, with
+   the illustrations sitting at its left and right ends. Rendering the artwork
+   as an <img> dropped the heading and, capped at 84px with object-fit: cover,
+   cut the motifs off mid-bowl. Using the strip as a background at its native
+   1152x148 ratio keeps every motif whole and leaves room for real heading text. */
+.banner {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; aspect-ratio: 1152 / 148;
+  margin: 12px 0;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  font-size: clamp(18px, 2.2vw, 26px);
+}
+.banner--ingredients { background-image: url('/images/hero-ingredients.svg'); }
+.banner--directions { background-image: url('/images/hero-directions.svg'); }
 
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 12px 0 6px; }
 .cols__title { color: var(--green-heading); font-size: 18px; margin-bottom: 8px; }
+/* Figma lists the ingredients as bullets with the amount in its own column. */
 .ing { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.ing__item {
+  position: relative; padding-left: 14px;
+  display: grid; grid-template-columns: 84px 1fr; gap: 8px; align-items: baseline;
+}
+.ing__item::before { content: '•'; position: absolute; left: 0; color: var(--ink); }
+.ing__amount { font-weight: 600; }
 
 .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; margin: 12px 0 16px; }
 .step__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
 .step__num { font-weight: 700; color: var(--green-heading); }
 .step__text { color: var(--ink); font-size: 16px; line-height: 1.4; }
 
-.todo { margin: 4px 0 16px; }
-.todo__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-.todo__col { background: var(--cream); border-radius: var(--radius-sm); padding: 14px 18px; }
-.todo__chef { font-size: 16px; color: var(--green-heading); margin-bottom: 8px; }
-.todo__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-.todo__item { font-size: 16px; }
-
+/* Figma keeps the "finished this meal" line inside the cream recipe card with a
+   green outline heart — not as a separate dark green bar. */
 .finish {
+  background: var(--cream);
   border-radius: var(--radius-md);
   padding: 14px 26px;
-  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
   margin-top: auto;
 }
-.heart { background: none; border: 0; color: var(--cream); font-size: 28px; cursor: pointer; line-height: 1; }
+.finish__text { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.finish__text b { color: var(--green-heading); }
+.finish__text span { color: var(--muted); font-size: 16px; }
+.heart { background: none; border: 0; color: var(--green); font-size: 28px; cursor: pointer; line-height: 1; }
 .heart.is-on { color: #ff6b6b; }
 
-.page__foot { display: flex; justify-content: flex-end; margin-top: 12px; }
-.page__foot .link-arrow { color: var(--green); font-size: 16px; }
+/* Closing call to action from the design: sage bar plus a solid Cookbook button. */
+.inspire {
+  background: var(--sage);
+  border-radius: var(--radius-md);
+  padding: 18px 26px;
+  margin-top: 16px;
+  display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap;
+}
+.inspire__text { color: var(--green-heading); font-weight: 600; font-size: 18px; }
 
 @media (max-width: 820px) {
-  .head { flex-direction: column; }
-  .head__meta { text-align: left; }
-  .head__tags, .nutri, .nutri__toggle { justify-content: flex-start; }
+  .head { flex-direction: column; gap: 18px; }
+  .head__meta { text-align: left; min-width: 0; }
+  .head__tags, .nutri { justify-content: flex-start; flex-wrap: wrap; }
   .cols, .steps { grid-template-columns: 1fr; }
-  .head__meta { min-width: 0; }
+}
+
+@media (max-width: 560px) {
+  .head { padding: 16px 18px; }
+  .head__title { font-size: 22px; }
+  /* Four macro cells side by side get squeezed to a few characters on a phone;
+     a 2x2 grid keeps every value readable. */
+  .nutri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+  .banner { margin: 8px 0; font-size: 16px; }
+  .ing__item { grid-template-columns: 64px 1fr; }
+  .step__head { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .finish { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px 20px; }
+  .inspire { flex-direction: column; align-items: stretch; text-align: center; gap: 14px; }
 }
 
 .notice { margin: 0 0 24px; }

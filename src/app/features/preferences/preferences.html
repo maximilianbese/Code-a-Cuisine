@@ -73,7 +73,6 @@
     <button class="btn btn-green generate" type="button" [disabled]="remaining() === 0" (click)="generate()">
       Generate a recipe
     </button>
-    <p class="quota" aria-live="polite">{{ remaining() }} of {{ dailyQuota }} free recipes left today</p>
   </div>
 
   @if (showDialog()) {

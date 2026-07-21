@@ -33,40 +33,36 @@
           <span class="chip is-static"><img class="icon" src="/assets/favorite.svg" alt="Likes" /> {{ r.likes }}</span>
         </div>
         <p class="nutri__label">Nutritional information</p>
-        <div class="nutri__toggle" role="group" aria-label="Nutrition scope">
-          <button type="button" class="chip" [class.is-active]="!showTotal()" (click)="showTotal.set(false)">Per portion</button>
-          <button type="button" class="chip" [class.is-active]="showTotal()" (click)="showTotal.set(true)">Total ({{ r.portions }} portions)</button>
-        </div>
         <div class="nutri">
-          <div class="nutri__cell"><span>Energie</span><b>{{ nutritionView().calories }} kcal</b></div>
-          <div class="nutri__cell"><span>Protein</span><b>{{ nutritionView().protein }}g · {{ macroPercent('protein') }}%</b></div>
-          <div class="nutri__cell"><span>Fat</span><b>{{ nutritionView().fat }}g · {{ macroPercent('fat') }}%</b></div>
-          <div class="nutri__cell"><span>Carbs</span><b>{{ nutritionView().carbs }}g · {{ macroPercent('carbs') }}%</b></div>
+          <div class="nutri__cell"><span>Energie</span><b>{{ r.nutrition.calories }} kcal</b></div>
+          <div class="nutri__cell"><span>Protein</span><b>{{ r.nutrition.protein }}g</b></div>
+          <div class="nutri__cell"><span>Fat</span><b>{{ r.nutrition.fat }}g</b></div>
+          <div class="nutri__cell"><span>Carbs</span><b>{{ r.nutrition.carbs }}g</b></div>
         </div>
       </div>
     </section>
 
-    <img class="banner banner--img" src="/images/hero-ingredients.svg" alt="Ingredients" />
+    <h2 class="banner banner--ingredients">Ingredients</h2>
     <section class="cols">
       <div>
-        <h2 class="cols__title">Your ingredients</h2>
+        <h3 class="cols__title">Your ingredients</h3>
         <ul class="ing">
           @for (item of r.yourIngredients; track $index) {
-            <li><b>{{ item.amount }}</b> {{ item.name }}</li>
+            <li class="ing__item"><b class="ing__amount">{{ item.amount }}</b> {{ item.name }}</li>
           }
         </ul>
       </div>
       <div>
-        <h2 class="cols__title">Extra ingredients</h2>
+        <h3 class="cols__title">Extra ingredients</h3>
         <ul class="ing">
           @for (item of r.extraIngredients; track $index) {
-            <li><b>{{ item.amount }}</b> {{ item.name }}</li>
+            <li class="ing__item"><b class="ing__amount">{{ item.amount }}</b> {{ item.name }}</li>
           }
         </ul>
       </div>
     </section>
 
-    <img class="banner banner--img" src="/images/hero-directions.svg" alt="Directions" />
+    <h2 class="banner banner--directions">Directions</h2>
     <section class="steps">
       @for (step of r.steps; track step.order) {
         <article class="step">
@@ -79,37 +75,20 @@
       }
     </section>
 
-    @if (r.cooks > 1) {
-      <section class="todo">
-        <h2 class="cols__title">Task split per cook</h2>
-        <div class="todo__grid">
-          @for (group of tasksByChef(); track group.chef) {
-            <article class="todo__col">
-              <h3 class="todo__chef">Chef {{ group.chef }}</h3>
-              <ul class="todo__list">
-                @for (step of group.steps; track step.order) {
-                  <li class="todo__item">{{ step.order }}. {{ step.title }}</li>
-                }
-              </ul>
-            </article>
-          }
-        </div>
-      </section>
-    }
-
-    <footer class="finish surface-green">
-      <span>Just finished this meal? Give it a heart, so the others know this is delicious.</span>
-      <button class="heart" type="button" [class.is-on]="liked()" (click)="toggleLike()" aria-label="Like recipe">
+    <footer class="finish">
+      <p class="finish__text">
+        <b>Just finished this meal?</b>
+        <span>Give it a heart, so that the others know this is delicious.</span>
+      </p>
+      <button class="heart" type="button" [class.is-on]="liked()" (click)="toggleLike()"
+        [attr.aria-pressed]="liked()" aria-label="Like recipe">
         {{ liked() ? '♥' : '♡' }}
       </button>
     </footer>
 
-    <div class="page__foot">
-      <a class="link-arrow" routerLink="/cookbook">
-        Go to cookbook
-        <svg viewBox="0 0 24 24" fill="none"><path d="M4 12h15m0 0-6-6m6 6-6 6"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-      </a>
-    </div>
+    <aside class="inspire">
+      <p class="inspire__text">Find inspiration for your next culinary adventure!</p>
+      <a class="btn btn-green" routerLink="/cookbook">Cookbook</a>
+    </aside>
   </main>
 }

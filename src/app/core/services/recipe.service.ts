@@ -1,7 +1,8 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { CuisineCategory, Recipe } from '../models/recipe.model';
 import { CUISINE_CATEGORIES, RESULT_RECIPES } from './recipe-data';
 import { LIBRARY_RECIPES } from '../data/library-recipes';
+import { RecipePersistenceService } from './recipe-persistence.service';
 
 /** sessionStorage key holding the latest generation so a reload survives it. */
 const CACHE_KEY = 'cac-results';
@@ -15,6 +16,7 @@ interface CachedResults {
 /** Holds the current recipes and cookbook data (seeded with mock data). */
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
+  private readonly store = inject(RecipePersistenceService);
   private readonly _results = signal<Recipe[]>(RESULT_RECIPES);
   private readonly _demo = signal(false);
 
@@ -41,13 +43,14 @@ export class RecipeService {
 
   /**
    * Look up a single recipe by id. The current results come first so a freshly
-   * generated recipe wins over a library entry that happens to share its id,
-   * but library recipes stay reachable — /recipe/:id is linked from the
-   * cookbook too, and searching only the results 404s every one of those links.
+   * generated recipe wins over a library entry that happens to share its id;
+   * previously generated and library recipes stay reachable afterwards, because
+   * /recipe/:id is linked from the cookbook too and searching only the results
+   * would 404 every one of those links.
    */
   getById(id: string): Recipe | undefined {
     const byId = (recipe: Recipe) => recipe.id === id;
-    return this._results().find(byId) ?? LIBRARY_RECIPES.find(byId);
+    return this._results().find(byId) ?? this.store.saved().find(byId) ?? LIBRARY_RECIPES.find(byId);
   }
 
   /** Seed recipes used as a fallback until the live library resolves. */

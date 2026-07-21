@@ -8,13 +8,15 @@ import type { AppConfig } from '../app/core/config/app-config';
  * before it is even sent. Local development uses environment.development.ts,
  * which `ng serve` substitutes automatically.
  *
- * The generation webhook runs on a self-hosted n8n reached through a Tailscale
- * Funnel. The library webhook stays empty on purpose — its Firestore node has
- * no credential yet, so an empty value makes RecipeApiService serve the bundled
- * recipes straight away instead of firing a request that is bound to fail.
+ * Both webhooks run on a self-hosted n8n reached through a Tailscale Funnel.
+ * The library URL has to be set for shared recipes to show up in the cookbook —
+ * leaving it empty pinned every visitor to the bundled demo list. Until the
+ * Firestore credential is in place the request simply fails and
+ * RecipeApiService falls back to the bundled recipes, so wiring it early is
+ * safe and the cookbook starts working the moment the credential lands.
  */
 export const environment: AppConfig = {
   production: true,
   n8nWebhookUrl: 'https://maxi.tailcb54e7.ts.net/webhook/generate-recipes',
-  n8nLibraryUrl: '',
+  n8nLibraryUrl: 'https://maxi.tailcb54e7.ts.net/webhook/library',
 };

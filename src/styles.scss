@@ -107,6 +107,12 @@ img { max-width: 100%; display: block; }
   font-size: 16px;
   padding: 9px 20px;
   border-radius: 999px;
+  /* Inline-flex so an icon inside a chip stays on the text's line — images are
+     display: block globally and would otherwise force a break. */
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
   background: #faf0e6;
   color: #1e5515;
   border: 2px solid transparent;
@@ -191,12 +197,8 @@ img { max-width: 100%; display: block; }
   font-size: 22px;
   font-weight: 600;
 }
-.banner--img {
-  background: none;
-  padding: 0;
-  width: 100%;
-  height: auto;
-}
+/* The recipe detail supplies the illustrated variants (.banner--ingredients /
+   .banner--directions) in its own stylesheet. */
 
 /* ---------- Inline notice (e.g. demo data while the backend is down) ------- */
 .notice {
@@ -214,8 +216,12 @@ img { max-width: 100%; display: block; }
 .center { text-align: center; }
 .stack { display: flex; flex-direction: column; }
 
-/* Inline icon that sits on a text baseline (sized to the surrounding text). */
+/* Inline icon that sits on a text baseline (sized to the surrounding text).
+   `img` is display: block globally, which would push the icon onto its own line
+   in any non-flex container — inline-block keeps it on the text's line without
+   each call site having to become a flex row. */
 .icon {
+  display: inline-block;
   height: 1em;
   width: auto;
   flex: none;

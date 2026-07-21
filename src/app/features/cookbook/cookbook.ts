@@ -3,12 +3,16 @@ import { RouterLink } from '@angular/router';
 import { Logo } from '../../shared/logo/logo';
 import { RecipeService } from '../../core/services/recipe.service';
 import { RecipeApiService } from '../../core/services/recipe-api.service';
+import { mergeById, RecipePersistenceService } from '../../core/services/recipe-persistence.service';
 import { Recipe } from '../../core/models/recipe.model';
 
-/** Recipes shown per page in the library grid. */
-const PAGE_SIZE = 20;
+/** Highlights shown in the "most liked" row. */
+const HIGHLIGHT_COUNT = 10;
 
-/** Public recipe library with cuisine filtering and pagination. */
+/**
+ * Cookbook landing page: intro, the most liked recipes and one tile per cuisine.
+ * The full listing lives on /cookbook/:cuisine, matching the design.
+ */
 @Component({
   selector: 'app-cookbook',
   imports: [RouterLink, Logo],
@@ -18,48 +22,38 @@ const PAGE_SIZE = 20;
 export class Cookbook {
   private readonly service = inject(RecipeService);
   private readonly api = inject(RecipeApiService);
-  /** Cuisine tiles used to group the library grid. */
+  private readonly store = inject(RecipePersistenceService);
+  /** Cuisine tiles linking to the per-cuisine pages. */
   readonly categories = this.service.getCategories();
 
-  /** All library recipes; seeded with mock data until the live fetch resolves. */
-  readonly all = signal<Recipe[]>(this.service.getAll());
-  /** Currently selected cuisine key, or 'all' for no filter. */
-  readonly selected = signal<string>('all');
-  /** Active page number (1-based). */
-  readonly page = signal(1);
+  /** Library recipes from the backend; mock data until the live fetch resolves. */
+  private readonly fetched = signal<Recipe[]>(this.service.getAll());
 
   /** Load the recipe library from the backend once the view is created. */
   constructor() {
-    this.api.getLibrary().subscribe((result) => this.all.set(result.recipes));
+    this.api.getLibrary().subscribe((result) => this.fetched.set(result.recipes));
   }
 
-  /** Recipes sorted by likes, descending, for the cookbook highlights. */
-  readonly mostLiked = computed(() => [...this.all()].sort((a, b) => b.likes - a.likes));
+  /**
+   * Everything the cookbook knows about: recipes generated in this browser come
+   * first, so a fresh creation is visible immediately even before the backend
+   * library has picked it up.
+   */
+  readonly all = computed(() => mergeById([...this.store.saved(), ...this.fetched()]));
 
-  /** Recipes matching the selected cuisine filter. */
-  readonly filtered = computed(() => {
-    const key = this.selected();
-    if (key === 'all') return this.all();
-    return this.all().filter((recipe) => recipe.cuisine.toLowerCase() === key);
-  });
+  /** The best-liked recipes, capped so the highlight row stays scannable. */
+  readonly mostLiked = computed(() =>
+    [...this.all()].sort((a, b) => b.likes - a.likes).slice(0, HIGHLIGHT_COUNT),
+  );
 
-  /** Total number of pages for the filtered list. */
-  readonly pageCount = computed(() => Math.max(1, Math.ceil(this.filtered().length / PAGE_SIZE)));
-
-  /** Recipes visible on the current page. */
-  readonly pageItems = computed(() => {
-    const start = (this.page() - 1) * PAGE_SIZE;
-    return this.filtered().slice(start, start + PAGE_SIZE);
-  });
-
-  /** Apply a cuisine filter and jump back to the first page. */
-  selectCuisine(key: string): void {
-    this.selected.set(this.selected() === key ? 'all' : key);
-    this.page.set(1);
-  }
-
-  /** Move to the given page, clamped to the valid range. */
-  goToPage(target: number): void {
-    this.page.set(Math.min(this.pageCount(), Math.max(1, target)));
+  /**
+   * Turn a vertical mouse wheel into horizontal scrolling on the highlight row,
+   * so it can be browsed with an ordinary wheel and not just a trackpad. A wheel
+   * that is already scrolling sideways is left untouched.
+   */
+  onWheel(event: WheelEvent): void {
+    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    event.preventDefault();
+    (event.currentTarget as HTMLElement).scrollLeft += event.deltaY;
   }
 }

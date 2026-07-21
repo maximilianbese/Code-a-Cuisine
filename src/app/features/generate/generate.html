@@ -73,15 +73,14 @@
             </li>
           }
         </ul>
-      } @else {
-        <p class="muted">No ingredients yet — add at least one to continue.</p>
       }
     </section>
   </div>
 
-  <div class="page__actions">
-    <button class="btn btn-green next" type="button" [disabled]="!ingredients().length" (click)="next()">
-      Next step
-    </button>
-  </div>
+  <!-- The design only reveals the step forward once the list holds something. -->
+  @if (ingredients().length) {
+    <div class="page__actions">
+      <button class="btn btn-green next" type="button" (click)="next()">Next step</button>
+    </div>
+  }
 </main>

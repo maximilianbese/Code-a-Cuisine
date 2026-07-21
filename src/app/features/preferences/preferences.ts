@@ -4,7 +4,7 @@ import { Logo } from '../../shared/logo/logo';
 import { Dialog } from '../../shared/dialog/dialog';
 import { StepIcon } from '../../shared/step-icon/step-icon';
 import { RecipeFlowService } from '../../core/services/recipe-flow.service';
-import { QuotaService, DAILY_QUOTA } from '../../core/services/quota.service';
+import { QuotaService } from '../../core/services/quota.service';
 import { CuisineOption, DietOption, TimeOption } from '../../core/models/preferences.model';
 
 /** One selectable preference chip: its value, its label and an optional hint. */
@@ -31,8 +31,6 @@ export class PreferencesPage {
   readonly prefs = this.flow.preferences;
   /** Generations the user has left today. */
   readonly remaining = this.quota.remaining;
-  /** Daily generation limit shown alongside the remaining count. */
-  readonly dailyQuota = DAILY_QUOTA;
   /** Lowest selectable number of portions; disables the minus button. */
   readonly minPortions = PORTIONS_RANGE.min;
   /** Highest selectable number of portions; disables the plus button. */

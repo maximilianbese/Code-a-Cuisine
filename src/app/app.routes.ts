@@ -8,7 +8,8 @@ export const routes: Routes = [
   { path: 'loading', loadComponent: () => import('./features/loading/loading').then((m) => m.Loading) },
   { path: 'results', loadComponent: () => import('./features/results/results').then((m) => m.Results) },
   { path: 'recipe/:id', loadComponent: () => import('./features/recipe-detail/recipe-detail').then((m) => m.RecipeDetail) },
-  { path: 'cookbook', loadComponent: () => import('./features/cookbook/cookbook').then((m) => m.Cookbook) },
+  { path: 'cookbook', pathMatch: 'full', loadComponent: () => import('./features/cookbook/cookbook').then((m) => m.Cookbook) },
+  { path: 'cookbook/:cuisine', loadComponent: () => import('./features/cuisine/cuisine').then((m) => m.CuisinePage) },
   { path: 'impressum', loadComponent: () => import('./features/impressum/impressum').then((m) => m.Impressum) },
   { path: '**', loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound) },
 ];

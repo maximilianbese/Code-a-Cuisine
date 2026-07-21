@@ -3,23 +3,24 @@
 .back { color: var(--green); }
 .page__title { color: var(--green-heading); font-size: var(--fs-h4); margin-bottom: 40px; }
 
-.counts { display: flex; justify-content: center; gap: 90px; margin-bottom: 44px; flex-wrap: wrap; }
+.counts { display: flex; justify-content: center; gap: 64px; margin-bottom: 34px; flex-wrap: wrap; }
 /* Figma "small H + Labels" 20/20. */
 .counts__label { font-size: var(--fs-label); font-weight: 600; margin-bottom: 16px; }
 
-.prefs { max-width: 860px; margin: 0 auto 44px; padding: 34px 40px; }
+/* Figma card width inside the 1440px frame; narrow enough that the six cuisine
+   chips still land on a single row, which is what the design shows. */
+.prefs { max-width: 720px; margin: 0 auto 40px; padding: 28px 34px; }
 /* Figma "H5" 24 for the section headings inside the card. */
 .prefs__heading { font-size: var(--fs-h5); color: var(--green); margin: 26px 0 16px; display: inline-flex; align-items: center; gap: 8px; }
 .prefs__heading:first-child { margin-top: 0; }
-.prefs__chips { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
-.prefs__chips .chip { font-size: var(--fs-label); padding: 8px 22px; }
+.prefs__chips { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
+.prefs__chips .chip { font-size: var(--fs-body); padding: 8px 17px; }
 
 /* Cooking-time option: pill with its hint rendered below, outside the button. */
 .time-opt { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
 .time-opt__hint { font-size: 15px; color: var(--green); opacity: .8; }
 
 .generate { padding: 16px 40px; }
-.quota { margin-top: 12px; font-size: 16px; color: var(--muted); }
 
 @media (max-width: 720px) {
   .page__title { text-align: left; }

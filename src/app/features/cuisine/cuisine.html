@@ -1,0 +1,60 @@
+<main class="page container">
+  <header class="page__top">
+    <app-logo />
+    <div class="page__bar">
+      <a class="link-arrow back" routerLink="/cookbook">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M20 12H5m0 0 6-6m-6 6 6 6"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        Cookbook
+      </a>
+      <a class="btn btn-green" routerLink="/generate">Generate a recipe</a>
+    </div>
+  </header>
+
+  @if (bannerArt(); as art) {
+    <h1 class="banner banner--art" [style.background-image]="'url(' + art + ')'">{{ title() }}</h1>
+  } @else {
+    <h1 class="banner banner--cuisine">{{ title() }}</h1>
+  }
+
+  @if (pageItems().length) {
+    <ol class="list">
+      @for (recipe of pageItems(); track recipe.id; let i = $index) {
+        <li class="row">
+          <span class="row__num">{{ rowNumber(i) }}.</span>
+          <a class="row__main" [routerLink]="['/recipe', recipe.id]">
+            <span class="row__time">
+              <img class="icon" src="/assets/cooking-time.svg" alt="" />
+              Cooking time: {{ recipe.cookingTimeMin }}min
+            </span>
+            <span class="row__name">{{ recipe.title }}</span>
+          </a>
+          <span class="row__tags">
+            @if (dietLabel(recipe.diet); as diet) { <span class="chip is-static">{{ diet }}</span> }
+            <span class="chip is-static">{{ recipe.timeLabel }}</span>
+            <span class="chip is-static"><img class="icon" src="/assets/favorite.svg" alt="Likes" /> {{ recipe.likes }}</span>
+          </span>
+        </li>
+      }
+    </ol>
+
+    @if (pageCount() > 1) {
+      <nav class="pager" aria-label="Pages">
+        <button class="pager__step" type="button" [disabled]="page() === 1"
+          (click)="goToPage(page() - 1)" aria-label="Previous page">&lt;</button>
+        @for (token of tokens(); track $index) {
+          @if (token === 'gap') {
+            <span class="pager__gap" aria-hidden="true">…</span>
+          } @else {
+            <button class="pager__num" type="button" [class.is-active]="page() === token"
+              [attr.aria-current]="page() === token ? 'page' : null" (click)="goToPage(+token)">{{ token }}</button>
+          }
+        }
+        <button class="pager__step" type="button" [disabled]="page() === pageCount()"
+          (click)="goToPage(page() + 1)" aria-label="Next page">&gt;</button>
+      </nav>
+    }
+  } @else {
+    <p class="muted list__empty">No recipes in this cuisine yet.</p>
+  }
+</main>

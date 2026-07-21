@@ -2,15 +2,16 @@
 .results__inner { padding-top: 40px; padding-bottom: 56px; }
 .results__top { margin-bottom: 34px; }
 
-.results__hero { display: flex; gap: 40px; align-items: center; margin-bottom: 44px; }
+.results__hero { display: flex; gap: 40px; align-items: flex-start; justify-content: space-between; margin-bottom: 44px; }
 .results__title { font-size: 52px; font-weight: 700; margin-bottom: 16px; }
 .results__lead { font-size: 19px; max-width: 46ch; margin-bottom: 18px; }
 /* The backend returns preference keys lowercase ("italian"), Figma shows them
    capitalised — do it in CSS so the raw value stays untouched. */
 .results__tags { display: flex; gap: 12px; }
 .results__tags .chip { text-transform: capitalize; }
+/* The design gives the artwork roughly two fifths of the content column. */
 .results__art {
-  flex: none; width: 360px; height: auto;
+  flex: none; width: 42%; max-width: 600px; height: auto;
   border-radius: var(--radius-md);
 }
 
