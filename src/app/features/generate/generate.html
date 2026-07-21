@@ -10,6 +10,7 @@
         <div class="form__col form__col--name">
           <label class="form__label" for="ing-name">Ingredient</label>
           <input id="ing-name" class="field" placeholder="e.g. Pasta" autocomplete="off"
+            [maxlength]="maxNameLength"
             [ngModel]="name()" (ngModelChange)="onName($event)" (keyup.enter)="submit()" />
         </div>
 

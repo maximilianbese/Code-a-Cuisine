@@ -14,6 +14,31 @@ export type IngredientUnit = (typeof INGREDIENT_UNITS)[number];
 /** Smallest accepted amount for every unit. */
 export const MIN_AMOUNT = 1;
 
+/** Shortest accepted ingredient name, so single stray letters are rejected. */
+export const MIN_NAME_LENGTH = 2;
+
+/** Longest accepted ingredient name, keeping the list readable. */
+export const MAX_NAME_LENGTH = 40;
+
+/**
+ * Characters an ingredient name may contain. Unicode letters are allowed on
+ * purpose: the known-ingredient list is English, but users type "Kartoffeln",
+ * "Crème fraîche" or "Jalapeño" just as often.
+ */
+const NAME_PATTERN = /^[\p{L}\p{N} '’\-.]+$/u;
+
+/** Trim and collapse inner whitespace, so " baby  spinach " becomes "baby spinach". */
+export function normaliseName(value: string): string {
+  return value.trim().replace(/\s+/g, ' ');
+}
+
+/** Whether the name is a plausible free-text ingredient. */
+export function isValidName(value: string): boolean {
+  const name = normaliseName(value);
+  if (name.length < MIN_NAME_LENGTH || name.length > MAX_NAME_LENGTH) return false;
+  return NAME_PATTERN.test(name);
+}
+
 /**
  * Largest amount a home cook would plausibly enter per unit. Anything above is
  * rejected instead of being stored, which also keeps the list free of the

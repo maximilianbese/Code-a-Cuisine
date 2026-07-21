@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Logo } from '../../shared/logo/logo';
 import { RecipeFlowService } from '../../core/services/recipe-flow.service';
 import {
-  INGREDIENT_UNITS, Ingredient, MIN_AMOUNT, clampAmount, formatAmount, isValidAmount, maxAmountFor,
+  INGREDIENT_UNITS, Ingredient, MAX_NAME_LENGTH, MIN_AMOUNT, MIN_NAME_LENGTH, clampAmount,
+  formatAmount, isValidAmount, isValidName, maxAmountFor, normaliseName,
 } from '../../core/models/ingredient.model';
 import { INGREDIENT_NAMES } from '../../core/data/ingredient-names';
 
@@ -23,6 +24,8 @@ export class Generate {
   readonly units = INGREDIENT_UNITS;
   /** Smallest amount the form accepts, shared with the number input. */
   readonly minAmount = MIN_AMOUNT;
+  /** Longest name the form accepts, shared with the name input. */
+  readonly maxNameLength = MAX_NAME_LENGTH;
   /** The ingredient list collected so far. */
   readonly ingredients = this.flow.ingredients;
   /** Current text in the ingredient name field. */
@@ -50,7 +53,7 @@ export class Generate {
 
   /** True once both the name and the amount would produce a valid entry. */
   readonly canSubmit = computed(
-    () => !!this.canonical(this.name()) && isValidAmount(this.amount(), this.unit()),
+    () => isValidName(this.name()) && isValidAmount(this.amount(), this.unit()),
   );
 
   /** Human-readable reason why the current input cannot be submitted. */
@@ -146,15 +149,29 @@ export class Generate {
 
   /** Return the message explaining why the input is invalid, or empty string. */
   private hintFor(name: string, amount: number, unit: string): string {
-    if (!this.canonical(name)) return 'Please choose an ingredient from the list.';
+    if (!isValidName(name)) return nameMessage(name);
     return amountMessage(amount, unit);
   }
 
-  /** Return the canonical spelling of a known ingredient, or empty string. */
+  /**
+   * Canonical spelling for ingredients we know, otherwise the cleaned-up input.
+   * The known list drives the suggestions and keeps casing consistent, but it
+   * must never block an ingredient the user actually has in their kitchen.
+   */
   private canonical(value: string): string {
-    const query = value.trim().toLowerCase();
-    return INGREDIENT_NAMES.find((n) => n.toLowerCase() === query) ?? '';
+    const name = normaliseName(value);
+    const known = INGREDIENT_NAMES.find((n) => n.toLowerCase() === name.toLowerCase());
+    return known ?? name;
   }
+}
+
+/** Explain why an ingredient name is rejected, or return an empty string. */
+function nameMessage(value: string): string {
+  const name = normaliseName(value);
+  if (!name) return 'Please enter an ingredient.';
+  if (name.length < MIN_NAME_LENGTH) return `Use at least ${MIN_NAME_LENGTH} characters.`;
+  if (name.length > MAX_NAME_LENGTH) return `Please keep it under ${MAX_NAME_LENGTH} characters.`;
+  return 'Use letters, numbers, spaces and hyphens only.';
 }
 
 /** Explain why an amount is rejected for its unit, or return an empty string. */
