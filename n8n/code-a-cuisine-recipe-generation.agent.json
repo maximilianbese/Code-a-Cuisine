@@ -1,0 +1,423 @@
+{
+  "name": "Code à Cuisine – Recipe Generation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-recipes",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://code-a-cuisine.maximilian-bese.de,http://localhost:4200"
+        }
+      },
+      "id": "webhook-1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        300
+      ],
+      "webhookId": "code-a-cuisine-generate"
+    },
+    {
+      "parameters": {
+        "jsCode": "// IP-based rate limiting (Kostenairbag): 3 recipes per IP per day, 12 system-wide.\nconst store = $getWorkflowStaticData('global');\nconst today = new Date().toISOString().slice(0, 10);\nif (store.day !== today) { store.day = today; store.perIp = {}; store.total = 0; }\nconst headers = $json.headers || {};\nconst forwarded = headers['x-forwarded-for'] || headers['x-real-ip'] || 'unknown';\nconst ip = String(forwarded).split(',')[0].trim();\nconst IP_LIMIT = 3;\nconst SYSTEM_LIMIT = 12;\nconst usedByIp = store.perIp[ip] || 0;\nconst exceeded = usedByIp >= IP_LIMIT || (store.total || 0) >= SYSTEM_LIMIT;\nif (!exceeded) { store.perIp[ip] = usedByIp + 1; store.total = (store.total || 0) + 1; }\nconst remaining = Math.max(0, IP_LIMIT - (store.perIp[ip] || usedByIp));\nreturn [{ json: { ...$json, ip, exceeded, remaining } }];"
+      },
+      "id": "ratelimit-1",
+      "name": "Rate Limit (IP)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -40,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-quota",
+              "leftValue": "={{ $json.exceeded }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-quota-1",
+      "name": "Quota Exceeded?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        180,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 429,
+        "responseBody": "={{ { error: 'Daily recipe limit reached. Please try again tomorrow.', remaining: 0 } }}",
+        "options": {}
+      },
+      "id": "respond-429",
+      "name": "Respond Quota Exceeded",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        400,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Available ingredients: {{ ($json.body.ingredients || []).map(i => `${i.amount}${i.unit === 'piece' ? ' pc' : i.unit} ${i.name}`).join(', ') }}.\nPreferences: portions={{ $json.body.preferences?.portions }}, cooks={{ $json.body.preferences?.cooks }}, time={{ $json.body.preferences?.time }}, cuisine={{ $json.body.preferences?.cuisine }}, diet={{ $json.body.preferences?.diet }}.\nSet portions={{ $json.body.preferences?.portions }} on every recipe and give nutrition per single portion.\nDistribute the steps across {{ $json.body.preferences?.cooks }} chef(s) using the chef field (values 1..{{ $json.body.preferences?.cooks }}).",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are the recipe engine of Code a Cuisine.\nYou turn the ingredients a user has at home into exactly 3 cookable recipes.\n\nHard rules:\n1. Write EVERY human-readable field in {{ $json.body.language || 'English' }}. This is independent of the\n   language the ingredients were typed in - never mirror the input language.\n2. Build the recipes primarily from the listed ingredients; anything else goes into\n   extraIngredients.\n3. Honour every preference: portions, cooks, cooking time, cuisine and diet.\n4. Nutrition values are per single portion.\n5. Distribute the steps across the requested number of chefs via the chef field.\n\nReturn EXACTLY 3 recipes with index 1, 2 and 3 in that order.\n\nEach recipe object has: id (kebab-case, unique), index (1-3), title, cookingTimeMin (number), cuisine, timeLabel, diet, likes (number 0-100), cooks (number), portions (number), nutrition {calories, protein, fat, carbs} as numbers per single portion, yourIngredients [{amount, name}], extraIngredients [{amount, name}], steps [{order, title, chef, text}]."
+        }
+      },
+      "id": "recipe-agent",
+      "name": "Recipe Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        660,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "chat-model",
+      "name": "Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        600,
+        500
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "Google Gemini (PaLM) API"
+        }
+      },
+      "notes": "Swap this node for OpenAI / Anthropic / Ollama - the agent keeps working."
+    },
+    {
+      "parameters": {
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n  \"recipes\": [\n    {\n      \"id\": \"cherry-tomato-focaccia\",\n      \"index\": 1,\n      \"title\": \"Cherry tomato and basil focaccia\",\n      \"cookingTimeMin\": 55,\n      \"cuisine\": \"Italian\",\n      \"timeLabel\": \"Complex\",\n      \"diet\": \"Vegan\",\n      \"likes\": 76,\n      \"cooks\": 2,\n      \"portions\": 2,\n      \"nutrition\": {\n        \"calories\": 480,\n        \"protein\": 11,\n        \"fat\": 16,\n        \"carbs\": 71\n      },\n      \"yourIngredients\": [\n        {\n          \"amount\": \"400g\",\n          \"name\": \"Bread flour\"\n        }\n      ],\n      \"extraIngredients\": [\n        {\n          \"amount\": \"7g\",\n          \"name\": \"Dry yeast\"\n        }\n      ],\n      \"steps\": [\n        {\n          \"order\": 1,\n          \"title\": \"Mix the dough\",\n          \"chef\": 1,\n          \"text\": \"Combine flour, yeast, salt and water.\"\n        }\n      ]\n    }\n  ]\n}"
+      },
+      "id": "recipe-output-parser",
+      "name": "Recipe Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        820,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output.recipes }}",
+        "options": {}
+      },
+      "id": "respond-1",
+      "name": "Respond to App",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.recipes",
+        "options": {}
+      },
+      "id": "split-1",
+      "name": "Split Recipes",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "projectId": "YOUR_FIREBASE_PROJECT_ID",
+        "database": "(default)",
+        "collection": "recipes",
+        "documentId": "={{ $json.id }}",
+        "columns": "id,index,title,cookingTimeMin,cuisine,timeLabel,diet,likes,cooks,portions,nutrition,yourIngredients,extraIngredients,steps"
+      },
+      "id": "firestore-1",
+      "name": "Save to Firestore",
+      "type": "n8n-nodes-base.googleFirebaseCloudFirestore",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        480
+      ],
+      "disabled": true,
+      "notes": "Aktivieren, sobald die Firestore-Credentials (Google Service Account) hinterlegt sind. Projekt-ID oben eintragen."
+    },
+    {
+      "parameters": {},
+      "id": "error-trigger-1",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "alerts@code-a-cuisine.example",
+        "toEmail": "you@example.com",
+        "subject": "=Code à Cuisine – Workflow-Fehler: {{ $json.workflow?.name }}",
+        "emailFormat": "text",
+        "text": "={{ 'Der Workflow ist fehlgeschlagen.\\n\\nWorkflow: ' + ($json.workflow?.name || 'n/a') + '\\nFehler-Node: ' + ($json.execution?.lastNodeExecuted || 'n/a') + '\\nMeldung: ' + ($json.execution?.error?.message || 'n/a') + '\\nZeit: ' + $now }}",
+        "options": {}
+      },
+      "id": "email-1",
+      "name": "Send Error Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        180,
+        620
+      ],
+      "notes": "SMTP-Credential zuweisen und echten Empfaenger (toEmail) eintragen."
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "library",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://code-a-cuisine.maximilian-bese.de,http://localhost:4200"
+        }
+      },
+      "id": "webhook-library",
+      "name": "Webhook Library",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "projectId": "YOUR_FIREBASE_PROJECT_ID",
+        "database": "(default)",
+        "collection": "recipes",
+        "returnAll": true,
+        "options": {}
+      },
+      "id": "firestore-library",
+      "name": "Read Firestore Library",
+      "type": "n8n-nodes-base.googleFirebaseCloudFirestore",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const clean = (o) => Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith('_')));\nconst recipes = $input.all().map((i) => clean(i.json));\nreturn [{ json: { recipes } }];"
+      },
+      "id": "code-aggregate-library",
+      "name": "Aggregate Library",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.recipes }}",
+        "options": {}
+      },
+      "id": "respond-library",
+      "name": "Respond Library",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        460,
+        720
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Rate Limit (IP)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rate Limit (IP)": {
+      "main": [
+        [
+          {
+            "node": "Quota Exceeded?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quota Exceeded?": {
+      "main": [
+        [
+          {
+            "node": "Respond Quota Exceeded",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Recipe Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Recipes": {
+      "main": [
+        [
+          {
+            "node": "Save to Firestore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Library": {
+      "main": [
+        [
+          {
+            "node": "Read Firestore Library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Firestore Library": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Library": {
+      "main": [
+        [
+          {
+            "node": "Respond Library",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recipe Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to App",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Recipes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Recipe Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recipe Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Recipe Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}
