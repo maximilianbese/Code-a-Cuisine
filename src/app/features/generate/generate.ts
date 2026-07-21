@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Logo } from '../../shared/logo/logo';
 import { RecipeFlowService } from '../../core/services/recipe-flow.service';
 import {
-  INGREDIENT_UNITS, Ingredient, MAX_NAME_LENGTH, MIN_AMOUNT, MIN_NAME_LENGTH, clampAmount,
-  formatAmount, isValidAmount, isValidName, maxAmountFor, normaliseName,
+  DEFAULT_AMOUNT, INGREDIENT_UNITS, Ingredient, MAX_NAME_LENGTH, MIN_AMOUNT, MIN_NAME_LENGTH,
+  clampAmount, formatAmount, isValidName, maxAmountFor, normaliseName,
 } from '../../core/models/ingredient.model';
 import { INGREDIENT_NAMES } from '../../core/data/ingredient-names';
 
@@ -26,12 +26,14 @@ export class Generate {
   readonly minAmount = MIN_AMOUNT;
   /** Longest name the form accepts, shared with the name input. */
   readonly maxNameLength = MAX_NAME_LENGTH;
+  /** Amount shown as a greyed-out placeholder while the field is empty. */
+  readonly amountPlaceholder = DEFAULT_AMOUNT;
   /** The ingredient list collected so far. */
   readonly ingredients = this.flow.ingredients;
   /** Current text in the ingredient name field. */
   readonly name = signal('');
-  /** Current value of the serving-size number field. */
-  readonly amount = signal(100);
+  /** Current value of the serving-size field, null while it is still empty. */
+  readonly amount = signal<number | null>(null);
   /** Currently selected unit for the serving size. */
   readonly unit = signal<string>('gram');
   /** Validation message shown under the form, empty when the input is valid. */
@@ -51,19 +53,21 @@ export class Generate {
       .slice(0, 6);
   });
 
-  /** True once both the name and the amount would produce a valid entry. */
-  readonly canSubmit = computed(
-    () => isValidName(this.name()) && isValidAmount(this.amount(), this.unit()),
-  );
-
   /** Human-readable reason why the current input cannot be submitted. */
   readonly hint = computed(() => this.hintFor(this.name(), this.amount(), this.unit()));
 
+  /** True once both the name and the amount would produce a valid entry. */
+  readonly canSubmit = computed(() => !this.hint());
+
   /**
    * Reason the amount is rejected, shown inline. The name is only complained
-   * about on submit, but a bad amount is worth flagging straight away.
+   * about on submit, but a bad amount is worth flagging straight away. An
+   * untouched field stays quiet — that is a placeholder, not a mistake.
    */
-  readonly amountHint = computed(() => amountMessage(this.amount(), this.unit()));
+  readonly amountHint = computed(() => {
+    const amount = this.amount();
+    return amount === null ? '' : amountMessage(amount, this.unit());
+  });
 
   /** Clear the validation error while the user edits the name. */
   onName(value: string): void {
@@ -71,16 +75,18 @@ export class Generate {
     this.error.set('');
   }
 
-  /** Store the typed amount and drop any stale error message. */
-  onAmount(value: number | string): void {
-    this.amount.set(Number(value));
+  /** Store the typed amount, treating an empty field as "not filled in yet". */
+  onAmount(value: number | string | null): void {
+    const text = String(value ?? '').trim();
+    this.amount.set(text === '' ? null : Number(text));
     this.error.set('');
   }
 
   /** Re-clamp the amount when the unit changes, since limits differ per unit. */
   onUnit(value: string): void {
+    const amount = this.amount();
     this.unit.set(value);
-    this.amount.set(clampAmount(this.amount(), value));
+    if (amount !== null) this.amount.set(clampAmount(amount, value));
     this.error.set('');
   }
 
@@ -135,21 +141,23 @@ export class Generate {
   /** Build a normalised ingredient from the current form state. */
   private buildItem(): Ingredient {
     const unit = this.unit();
-    return { name: this.canonical(this.name()), amount: clampAmount(this.amount(), unit), unit };
+    const amount = clampAmount(this.amount() ?? DEFAULT_AMOUNT, unit);
+    return { name: this.canonical(this.name()), amount, unit };
   }
 
   /** Reset name, amount and edit state back to the defaults. */
   private resetForm(): void {
     this.editingIndex.set(null);
     this.name.set('');
-    this.amount.set(100);
+    this.amount.set(null);
     this.unit.set('gram');
     this.error.set('');
   }
 
   /** Return the message explaining why the input is invalid, or empty string. */
-  private hintFor(name: string, amount: number, unit: string): string {
+  private hintFor(name: string, amount: number | null, unit: string): string {
     if (!isValidName(name)) return nameMessage(name);
+    if (amount === null) return 'Please enter a serving size.';
     return amountMessage(amount, unit);
   }
 

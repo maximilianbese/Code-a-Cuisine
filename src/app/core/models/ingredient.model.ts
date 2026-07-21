@@ -14,6 +14,9 @@ export type IngredientUnit = (typeof INGREDIENT_UNITS)[number];
 /** Smallest accepted amount for every unit. */
 export const MIN_AMOUNT = 1;
 
+/** Amount suggested as a placeholder while the serving-size field is empty. */
+export const DEFAULT_AMOUNT = 100;
+
 /** Shortest accepted ingredient name, so single stray letters are rejected. */
 export const MIN_NAME_LENGTH = 2;
 

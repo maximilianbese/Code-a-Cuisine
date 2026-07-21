@@ -18,7 +18,7 @@
           <label class="form__label" for="ing-amount">Serving size</label>
           <div class="form__row">
             <input id="ing-amount" class="field field--num" type="number" inputmode="numeric"
-              [min]="minAmount" [max]="maxAmount()" step="1"
+              [placeholder]="amountPlaceholder" [min]="minAmount" [max]="maxAmount()" step="1"
               [ngModel]="amount()" (ngModelChange)="onAmount($event)" (keyup.enter)="submit()" />
             <select class="field field--unit" [ngModel]="unit()" (ngModelChange)="onUnit($event)"
               aria-label="Unit">
