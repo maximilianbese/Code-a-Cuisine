@@ -1,4 +1,8 @@
-/* Full-width shell; content is capped at 1440px by .container / page wrappers. */
+/* Full-width shell; content is capped at 1440px by .container / page wrappers.
+   `overflow-x: clip` lives here rather than on <html>/<body> on purpose: it
+   contains any horizontal bleed at the application root without turning the
+   document into a scroll container, so sticky positioning and scroll anchoring
+   keep working. `clip` (not `hidden`) also leaves the vertical axis untouched. */
 .app-shell {
   width: 100%;
   overflow-x: clip;

@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { CuisineCategory, Recipe } from '../models/recipe.model';
 import { CUISINE_CATEGORIES, RESULT_RECIPES } from './recipe-data';
+import { LIBRARY_RECIPES } from '../data/library-recipes';
 
 /** sessionStorage key holding the latest generation so a reload survives it. */
 const CACHE_KEY = 'cac-results';
@@ -38,19 +39,31 @@ export class RecipeService {
     writeCache({ recipes: this._results(), demo: this._demo() });
   }
 
-  /** Look up a single recipe by its id. */
+  /**
+   * Look up a single recipe by id. The current results come first so a freshly
+   * generated recipe wins over a library entry that happens to share its id,
+   * but library recipes stay reachable — /recipe/:id is linked from the
+   * cookbook too, and searching only the results 404s every one of those links.
+   */
   getById(id: string): Recipe | undefined {
-    return this._results().find((recipe) => recipe.id === id);
+    const byId = (recipe: Recipe) => recipe.id === id;
+    return this._results().find(byId) ?? LIBRARY_RECIPES.find(byId);
   }
 
   /** Seed recipes used as a fallback until the live library resolves. */
   getAll(): Recipe[] {
-    return this._results();
+    return LIBRARY_RECIPES;
   }
 
   /** Cuisine categories used to group the cookbook library. */
   getCategories(): CuisineCategory[] {
     return CUISINE_CATEGORIES;
+  }
+
+  /** Drop the last generation so a new run never shows the previous recipes. */
+  clearResults(): void {
+    this.apply(RESULT_RECIPES, false);
+    clearCache();
   }
 
   /** Write both signals in one place so they never drift apart. */
@@ -74,9 +87,19 @@ function readCache(): CachedResults | null {
 
 /** Cache the current generation; a full storage quota is not worth failing on. */
 function writeCache(value: CachedResults): void {
+  withStorage((store) => store.setItem(CACHE_KEY, JSON.stringify(value)));
+}
+
+/** Forget the cached generation so a reload cannot resurrect it. */
+function clearCache(): void {
+  withStorage((store) => store.removeItem(CACHE_KEY));
+}
+
+/** Run a storage write, tolerating disabled storage and quota errors. */
+function withStorage(write: (store: Storage) => void): void {
   if (typeof sessionStorage === 'undefined') return;
   try {
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify(value));
+    write(sessionStorage);
   } catch {
     /* storage disabled or full – the in-memory state still works */
   }

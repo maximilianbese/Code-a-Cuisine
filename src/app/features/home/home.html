@@ -1,18 +1,28 @@
 <section class="hero surface-green">
-  <div class="hero__plates" aria-hidden="true">
-    <img class="plate plate--1" src="/images/plate-1.svg" alt="" />
-    <img class="plate plate--2" src="/images/plate-2.svg" alt="" />
-    <img class="plate plate--3" src="/images/plate-3.svg" alt="" />
-  </div>
-
   <div class="hero__inner container">
+    <!-- Anchored to the capped content column, not the full-bleed section, so
+         the plates stay next to the headline instead of drifting to the far
+         screen edge on ultra-wide displays. -->
+    <div class="hero__plates" aria-hidden="true">
+      <img class="plate" src="/images/plate-chicken-greenbeans.webp"
+        width="654" height="642" alt="" />
+      <img class="plate" src="/images/plate-salmon-salad.webp"
+        width="855" height="847" alt="" />
+      <img class="plate" src="/images/plate-steak-wedges.webp"
+        width="878" height="900" alt="" />
+      <img class="plate" src="/images/plate-chicken-quinoa.webp"
+        width="896" height="900" alt="" />
+      <img class="plate" src="/images/plate-salmon-asparagus.webp"
+        width="899" height="900" alt="" />
+    </div>
+
     <header class="hero__top"><app-logo variant="light" /></header>
 
     <div class="hero__body">
       <div class="hero__text">
         <p class="hero__eyebrow">AI-Powered recipe generator</p>
         <h1 class="hero__title">Code à Cuisine</h1>
-        <a class="btn btn-cream hero__cta" routerLink="/generate">Get started</a>
+        <a class="btn btn-cream hero__cta" routerLink="/generate" (click)="startNewRun()">Get started</a>
       </div>
     </div>
 

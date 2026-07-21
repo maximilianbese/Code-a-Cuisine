@@ -1,6 +1,7 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Ingredient } from '../models/ingredient.model';
 import { Preferences, defaultPreferences } from '../models/preferences.model';
+import { RecipeService } from './recipe.service';
 
 /** Approximate gram equivalents so mixed units can be summed for validation. */
 const UNIT_TO_GRAMS: Record<string, number> = {
@@ -12,6 +13,7 @@ const MIN_GRAMS_PER_PORTION = 100;
 /** Holds the multi-step generation state (ingredients + preferences). */
 @Injectable({ providedIn: 'root' })
 export class RecipeFlowService {
+  private readonly recipes = inject(RecipeService);
   /** Ingredients the user entered in step 1, most recent first. */
   readonly ingredients = signal<Ingredient[]>([]);
   /** Portions, cooks and taste preferences chosen in step 2. */
@@ -49,6 +51,16 @@ export class RecipeFlowService {
   reset(): void {
     this.ingredients.set([]);
     this.preferences.set(defaultPreferences());
+  }
+
+  /**
+   * Begin a fresh generation: clears the collected input *and* the previous
+   * results, so step 1 never opens pre-filled and /results cannot briefly
+   * flash the recipes from the run before.
+   */
+  startNewRun(): void {
+    this.reset();
+    this.recipes.clearResults();
   }
 }
 

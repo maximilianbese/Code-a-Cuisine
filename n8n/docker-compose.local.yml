@@ -1,6 +1,12 @@
 # Lokales n8n – 100% kostenlos, keine Kreditkarte.
 # Start:  docker compose -f n8n/docker-compose.local.yml up -d
 # Stop:   docker compose -f n8n/docker-compose.local.yml down   (Daten bleiben im Volume erhalten)
+#
+# Dieselbe Datei deckt beide Betriebsarten ab:
+#   * ohne .env            -> n8n ist nur unter http://localhost:5678 erreichbar
+#   * mit N8N_PUBLIC_URL   -> n8n erzeugt Webhook-URLs auf dieser öffentlichen
+#                             Adresse (siehe n8n/PUBLIC-ACCESS.md)
+# Vorlage für die .env liegt in n8n/.env.example.
 services:
   n8n:
     image: n8nio/n8n:latest
@@ -13,6 +19,11 @@ services:
       - N8N_RUNNERS_ENABLED=true
       - GENERIC_TIMEZONE=Europe/Berlin
       - N8N_DIAGNOSTICS_ENABLED=false
+      # Basis-Adresse, unter der n8n von außen erreichbar ist. Ohne diese
+      # Variable baut n8n seine Webhook-URLs auf localhost – die zeigen dann
+      # vom Browser eines Besuchers aus auf dessen eigenen Rechner.
+      - WEBHOOK_URL=${N8N_PUBLIC_URL:-http://localhost:5678/}
+      - N8N_EDITOR_BASE_URL=${N8N_PUBLIC_URL:-http://localhost:5678/}
     volumes:
       - n8n_data:/home/node/.n8n          # speichert Workflows + Credentials dauerhaft
 

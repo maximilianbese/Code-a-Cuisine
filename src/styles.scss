@@ -46,7 +46,10 @@
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; overflow-x: hidden; }
+/* No overflow rules here on purpose: clipping belongs on the element that
+   actually overflows (see .hero__plates), never on the document root — it
+   breaks position: sticky and scroll anchoring for the whole page. */
+html, body { margin: 0; padding: 0; }
 
 body {
   font-family: var(--font);
@@ -56,7 +59,6 @@ body {
   color: var(--ink);
   background: var(--white);
   min-height: 100vh;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 

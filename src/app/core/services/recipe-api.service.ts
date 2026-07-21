@@ -4,7 +4,7 @@ import { Observable, catchError, map, of } from 'rxjs';
 import { APP_CONFIG } from '../config/app-config';
 import { GenerateRequest } from '../models/generate-request.model';
 import { Recipe } from '../models/recipe.model';
-import { RESULT_RECIPES } from './recipe-data';
+import { LIBRARY_RECIPES } from '../data/library-recipes';
 import { buildFallbackRecipes } from './fallback-recipe';
 
 /** Recipes plus whether they came from the live backend or the demo fallback. */
@@ -27,7 +27,8 @@ export class RecipeApiService {
     return this.http.post<Recipe[]>(url, request).pipe(
       map((res) => (hasRecipes(res) ? live(res) : demo(buildFallbackRecipes(request)))),
       catchError((error) => {
-        console.error('Recipe generation failed, showing demo recipes.', error);
+        // Handled + recovered, so this is a warning rather than an error.
+        console.warn('Recipe generation failed, showing demo recipes.', error);
         return fallback();
       }),
     );
@@ -36,12 +37,12 @@ export class RecipeApiService {
   /** Fetch every stored recipe for the public library, with a demo fallback. */
   getLibrary(): Observable<RecipeResult> {
     const url = APP_CONFIG.n8nLibraryUrl;
-    if (!url) return of(demo(RESULT_RECIPES));
+    if (!url) return of(demo(LIBRARY_RECIPES));
     return this.http.get<Recipe[]>(url).pipe(
-      map((res) => (hasRecipes(res) ? live(res) : demo(RESULT_RECIPES))),
+      map((res) => (hasRecipes(res) ? live(res) : demo(LIBRARY_RECIPES))),
       catchError((error) => {
-        console.error('Library fetch failed, showing demo recipes.', error);
-        return of(demo(RESULT_RECIPES));
+        console.warn('Library fetch failed, showing demo recipes.', error);
+        return of(demo(LIBRARY_RECIPES));
       }),
     );
   }

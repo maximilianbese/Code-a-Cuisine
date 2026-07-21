@@ -6,13 +6,18 @@
         "httpMethod": "POST",
         "path": "generate-recipes",
         "responseMode": "responseNode",
-        "options": {}
+        "options": {
+          "allowedOrigins": "https://code-a-cuisine.maximilian-bese.de,http://localhost:4200"
+        }
       },
       "id": "webhook-1",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-260, 300],
+      "position": [
+        -260,
+        300
+      ],
       "webhookId": "code-a-cuisine-generate"
     },
     {
@@ -23,7 +28,10 @@
       "name": "Rate Limit (IP)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-40, 300]
+      "position": [
+        -40,
+        300
+      ]
     },
     {
       "parameters": {
@@ -53,7 +61,10 @@
       "name": "Quota Exceeded?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [180, 300]
+      "position": [
+        180,
+        300
+      ]
     },
     {
       "parameters": {
@@ -66,7 +77,10 @@
       "name": "Respond Quota Exceeded",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [400, 140]
+      "position": [
+        400,
+        140
+      ]
     },
     {
       "parameters": {
@@ -76,7 +90,10 @@
       "name": "Validate & Build Prompt",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [400, 380]
+      "position": [
+        400,
+        380
+      ]
     },
     {
       "parameters": {
@@ -100,7 +117,10 @@
       "name": "Generate with Gemini",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [620, 380]
+      "position": [
+        620,
+        380
+      ]
     },
     {
       "parameters": {
@@ -110,7 +130,10 @@
       "name": "Parse Recipes",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [840, 380]
+      "position": [
+        840,
+        380
+      ]
     },
     {
       "parameters": {
@@ -122,7 +145,10 @@
       "name": "Respond to App",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1060, 280]
+      "position": [
+        1060,
+        280
+      ]
     },
     {
       "parameters": {
@@ -133,7 +159,10 @@
       "name": "Split Recipes",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
-      "position": [1060, 480]
+      "position": [
+        1060,
+        480
+      ]
     },
     {
       "parameters": {
@@ -148,7 +177,10 @@
       "name": "Save to Firestore",
       "type": "n8n-nodes-base.googleFirebaseCloudFirestore",
       "typeVersion": 1,
-      "position": [1280, 480],
+      "position": [
+        1280,
+        480
+      ],
       "disabled": true,
       "notes": "Aktivieren, sobald die Firestore-Credentials (Google Service Account) hinterlegt sind. Projekt-ID oben eintragen."
     },
@@ -158,7 +190,10 @@
       "name": "Error Trigger",
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1,
-      "position": [-40, 620]
+      "position": [
+        -40,
+        620
+      ]
     },
     {
       "parameters": {
@@ -173,7 +208,10 @@
       "name": "Send Error Email",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
-      "position": [180, 620],
+      "position": [
+        180,
+        620
+      ],
       "notes": "SMTP-Credential zuweisen und echten Empfaenger (toEmail) eintragen."
     },
     {
@@ -181,13 +219,18 @@
         "httpMethod": "GET",
         "path": "library",
         "responseMode": "responseNode",
-        "options": {}
+        "options": {
+          "allowedOrigins": "https://code-a-cuisine.maximilian-bese.de,http://localhost:4200"
+        }
       },
       "id": "webhook-library",
       "name": "Webhook Library",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-260, 720]
+      "position": [
+        -260,
+        720
+      ]
     },
     {
       "parameters": {
@@ -202,7 +245,10 @@
       "name": "Read Firestore Library",
       "type": "n8n-nodes-base.googleFirebaseCloudFirestore",
       "typeVersion": 1,
-      "position": [-20, 720]
+      "position": [
+        -20,
+        720
+      ]
     },
     {
       "parameters": {
@@ -212,7 +258,10 @@
       "name": "Aggregate Library",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [220, 720]
+      "position": [
+        220,
+        720
+      ]
     },
     {
       "parameters": {
@@ -224,7 +273,10 @@
       "name": "Respond Library",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [460, 720]
+      "position": [
+        460,
+        720
+      ]
     }
   ],
   "connections": {

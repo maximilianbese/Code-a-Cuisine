@@ -3,6 +3,10 @@ import { Ingredient, formatAmount } from '../models/ingredient.model';
 import { Preferences, TimeOption } from '../models/preferences.model';
 import { Recipe, RecipeIngredient } from '../models/recipe.model';
 import { RESULT_RECIPES } from './recipe-data';
+import { LIBRARY_RECIPES } from '../data/library-recipes';
+
+/** How many suggestions a generation run returns. */
+const SUGGESTION_COUNT = 3;
 
 /** Cooking-time bracket shown on the card, per selected time option. */
 const TIME_LABEL: Record<TimeOption, string> = {
@@ -23,7 +27,19 @@ const DIET_LABEL: Record<string, string> = {
  * was entered — the earlier version always returned the same 2-portion pasta.
  */
 export function buildFallbackRecipes(request: GenerateRequest): Recipe[] {
-  return RESULT_RECIPES.map((recipe) => applyRequest(recipe, request));
+  return pickSeeds(request.preferences.cuisine)
+    .map((recipe, position) => ({ ...applyRequest(recipe, request), index: position + 1 }));
+}
+
+/**
+ * Prefer library recipes from the cuisine the user picked so the demo run still
+ * answers the question that was asked; top up from the default trio when that
+ * cuisine has fewer than three entries.
+ */
+function pickSeeds(cuisine: string): Recipe[] {
+  const wanted = cuisine.toLowerCase();
+  const matching = LIBRARY_RECIPES.filter((r) => r.cuisine.toLowerCase() === wanted);
+  return [...matching, ...RESULT_RECIPES].slice(0, SUGGESTION_COUNT);
 }
 
 /** Overlay a single seed recipe with the user's preferences and ingredients. */

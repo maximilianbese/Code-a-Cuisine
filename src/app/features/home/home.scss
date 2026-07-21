@@ -1,4 +1,24 @@
-.hero { position: relative; overflow: hidden; min-height: 100vh; display: flex; }
+/* `clip` rather than `hidden`: it contains the plate column, which is taller
+   than the section, without turning it into a scroll container — that is what
+   lets the document root stay free of any overflow rule. */
+.hero {
+  position: relative;
+  overflow: clip;
+  min-height: 100vh;
+  display: flex;
+
+  /* Diameter of one plate. The widescreen frame shows the column at roughly a
+     third of the frame height, which is what the vh term reproduces. */
+  --plate-size: clamp(220px, 32vh, 400px);
+  /* How far each plate is pushed past the right edge of the content column.
+     The lower bound keeps a visible overhang below the widescreen breakpoint:
+     a circle that merely ends flush on the viewport edge reads as an accident,
+     whereas one that clearly runs off it reads as intent. Above the breakpoint
+     it drops to zero, where the composition is centred and nothing is clipped. */
+  --plate-bleed: clamp(56px, calc((var(--shell-max) - 100vw) * .25), 96px);
+  /* Share of the diameter that consecutive plates overlap. */
+  --plate-overlap: -34%;
+}
 .hero__inner {
   position: relative;
   z-index: 1;
@@ -10,13 +30,20 @@
   gap: 40px;
   flex: 1;
 }
+/* Both bands are positioned so they keep painting above the plate column,
+   which sits in the positioned layer as well (see .hero__plates). */
+.hero__top { position: relative; z-index: 1; }
 .hero__body {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   flex: 1;
   padding-bottom: 12vh;
 }
-.hero__text { max-width: none; }
+/* Keeps the headline clear of the plate column now that the plates no longer
+   bleed off-screen on wide viewports and genuinely occupy that space. */
+.hero__text { max-width: calc(100% - var(--plate-size) - 32px); }
 .hero__eyebrow { font-size: clamp(24px, 3.3vw, 48px); font-weight: 600; margin-bottom: 4px; }
 .hero__title {
   font-family: var(--font-display);
@@ -27,8 +54,9 @@
 }
 .hero__cta { margin-top: 44px; padding: 16px 40px; font-size: 24px; }
 
-/* Plates pinned flush to the right edge; raw SVGs, no ring/shadow around them.
-   Size is capped in px so they never overrun the text on ultra-wide screens. */
+/* Plate column, flush to the right edge of the content column. It carries no
+   transform of its own — the offset lives on the plates themselves so the
+   column keeps its layout box and .hero can clip the bleed locally. */
 .hero__plates {
   position: absolute;
   top: 0;
@@ -38,15 +66,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  transform: translateX(22%);
   pointer-events: none;
   z-index: 0;
 }
 .plate {
-  width: clamp(300px, 44vh, 480px);
+  width: var(--plate-size);
   height: auto;
+  /* Pushes each plate past the column edge; clipped by .hero, never by <body>. */
+  transform: translateX(var(--plate-bleed));
 }
-.plate--2, .plate--3 { margin-top: -5vh; }
+/* Percentage margins resolve against the column width, which equals one plate,
+   so the overlap stays proportional at every breakpoint. */
+.plate + .plate { margin-top: var(--plate-overlap); }
 
 /* Sits above the plate column so the links stay readable at every width. */
 .hero__foot { position: relative; z-index: 1; display: flex; align-items: center; gap: 26px; font-size: 24px; }
@@ -59,8 +90,9 @@
    width here already. Without this the title and the footer link run underneath
    the plates between ~700px and ~1024px. */
 @media (max-width: 1024px) {
-  .hero__plates { transform: translateX(38%); }
-  .plate { width: clamp(260px, 38vh, 380px); }
+  /* A percentage bleed from here down: it scales with the plate rather than
+     with the (now much smaller) gap between viewport and content cap. */
+  .hero { --plate-size: clamp(200px, 30vh, 340px); --plate-bleed: 38%; }
   .hero__title { white-space: normal; }
   .hero__text, .hero__foot { max-width: 62%; }
 }
@@ -68,25 +100,30 @@
 /* Mobile: plates form one continuous column flush to the right edge, cut to
    ~half; text sits on the left. Mirrors the Figma mobile frame. */
 @media (max-width: 760px) {
-  .hero__plates {
-    justify-content: center;
-    transform: translateX(56%);
-  }
-  /* Sized by viewport height so three plates always fill the column top-to-bottom. */
-  .plate { width: 34vh; margin-top: 0; }
-  .plate--2, .plate--3 { margin-top: -2vh; }
+  .hero { --plate-size: 30vh; --plate-bleed: 56%; --plate-overlap: -20%; }
   .hero__text, .hero__foot { max-width: 58%; }
   .hero__title { white-space: normal; }
   .hero__foot { flex-direction: column; align-items: flex-start; gap: 10px; font-size: 20px; }
 }
 
+/* Widescreen. The design note asks for an explicit breakpoint at 1440px with
+   two rules: the content area keeps its desktop width (--shell-max, already
+   applied by .hero__inner) while the background keeps running to both screen
+   edges (.hero is full-bleed). Zeroing the bleed here is what stops a plate
+   from being clipped mid-canvas once there is green to the right of the
+   column — the --plate-bleed clamp already converges on 0 at exactly 1440px,
+   so this reads as a hard rule without introducing a visual jump. */
+@media (min-width: 1440px) {
+  .hero { --plate-bleed: 0px; }
+}
+
 @media (max-width: 480px) {
+  .hero { --plate-size: 33vh; }
   .hero__inner { padding: 24px 20px 28px; gap: 24px; }
   .hero__text { max-width: 58%; }
   /* Figma "Mob. H1" 64/72 and "Mob. H3" 24 for the eyebrow. */
   .hero__title { font-size: clamp(40px, 13vw, var(--fs-h1-mob)); line-height: 1.125; }
   .hero__eyebrow { font-size: clamp(18px, 6vw, var(--fs-h3-mob)); }
   .hero__cta { margin-top: 28px; padding: 14px 30px; font-size: 18px; }
-  .plate { width: 37vh; }
   .hero__foot { font-size: 18px; }
 }
