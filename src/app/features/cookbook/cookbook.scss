@@ -47,7 +47,12 @@
 .page__foot .link-arrow { color: var(--green); font-size: 16px; }
 
 @media (max-width: 900px) {
-  .intro { grid-template-columns: 1fr; padding: 22px; gap: 24px; }
+  /* minmax(0, 1fr), not 1fr: a plain 1fr track takes its min size from the
+     content, and the horizontally scrolling "most liked" row is wider than the
+     phone — that pushed the whole page sideways. The 0 minimum (plus min-width:0
+     on the items) lets the column shrink so the row scrolls inside instead. */
+  .intro { grid-template-columns: minmax(0, 1fr); padding: 22px; gap: 24px; }
+  .intro__text, .liked { min-width: 0; }
   /* Two tiles still fit comfortably on a tablet; dropping straight to one
      column made the cuisine list needlessly long. */
   .cats { grid-template-columns: 1fr 1fr; }
