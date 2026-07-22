@@ -10,10 +10,11 @@
 .banner--art {
   margin: 18px 0 26px;
   padding: 0;
-  /* The strip art has transparent top/bottom margins; a cream fill behind it
-     reads as the bar and stops the white page bleeding through as a thin
-     border above and below it. */
-  background-color: var(--cream);
+  /* Transparent on purpose: the art is a slim cream bar whose end motifs are
+     taller than the bar and overhang into the transparent top/bottom margins.
+     The former white edge line is fixed at the source (the near-white fringe in
+     the asset was recoloured to cream), so no fill is needed here. */
+  background-color: transparent;
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;

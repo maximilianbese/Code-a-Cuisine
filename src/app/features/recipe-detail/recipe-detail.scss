@@ -37,16 +37,19 @@
    the illustrations sitting at its left and right ends. Rendering the artwork
    as an <img> dropped the heading and, capped at 84px with object-fit: cover,
    cut the motifs off mid-bowl. The strip is used as a background instead, at the
-   asset's OWN native ratio so nothing is stretched, over an explicit cream fill.
-   The artwork has fully transparent top/bottom margins, so the fill is what the
-   eye reads as the bar — without it those margins let the white page bleed
-   through as a thin light border above and below each strip. */
+   asset's OWN native ratio so nothing is stretched. The background stays
+   transparent on purpose: the artwork is a SLIM cream bar with the end motifs
+   deliberately taller than it, overhanging into the transparent top/bottom
+   margins so they read as poking out of the bar (as in Figma). A cream fill here
+   would square the whole box off and swallow that overhang. The white edge line
+   the fill was hiding is gone at the source — the near-white anti-alias fringe
+   in the asset was recoloured to the cream tone. */
 .banner {
   display: flex; align-items: center; justify-content: center;
   width: 100%;
   margin: 12px 0;
   padding: 0;
-  background-color: var(--cream);
+  background-color: transparent;
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
