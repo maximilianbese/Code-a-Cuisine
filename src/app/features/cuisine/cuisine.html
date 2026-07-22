@@ -22,7 +22,7 @@
       @for (recipe of pageItems(); track recipe.id; let i = $index) {
         <li class="row">
           <span class="row__num">{{ rowNumber(i) }}.</span>
-          <a class="row__main" [routerLink]="['/recipe', recipe.id]">
+          <a class="row__main" [routerLink]="['/recipe', recipe.id]" [queryParams]="{ from: 'cookbook' }">
             <span class="row__time">
               <img class="icon" src="/assets/cooking-time.svg" alt="" />
               Cooking time: {{ recipe.cookingTimeMin }}min

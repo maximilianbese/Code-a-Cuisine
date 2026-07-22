@@ -17,7 +17,7 @@
       <h2 class="liked__title">Most liked recipes <img class="icon" src="/assets/favorite.svg" alt="" /></h2>
       <div class="liked__row" (wheel)="onWheel($event)">
         @for (recipe of mostLiked(); track recipe.id) {
-          <a class="liked__card" [routerLink]="['/recipe', recipe.id]">
+          <a class="liked__card" [routerLink]="['/recipe', recipe.id]" [queryParams]="{ from: 'cookbook' }">
             <span class="liked__meta">
               <span class="liked__time">
                 <img class="icon" src="/assets/cooking-time.svg" alt="" />

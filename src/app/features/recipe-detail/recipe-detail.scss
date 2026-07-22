@@ -36,20 +36,32 @@
 /* Section banner: in Figma this is a cream bar carrying a centred heading, with
    the illustrations sitting at its left and right ends. Rendering the artwork
    as an <img> dropped the heading and, capped at 84px with object-fit: cover,
-   cut the motifs off mid-bowl. Using the strip as a background at its native
-   1152x148 ratio keeps every motif whole and leaves room for real heading text. */
+   cut the motifs off mid-bowl. The strip is used as a background instead, at the
+   asset's OWN native ratio so nothing is stretched, over an explicit cream fill.
+   The artwork has fully transparent top/bottom margins, so the fill is what the
+   eye reads as the bar — without it those margins let the white page bleed
+   through as a thin light border above and below each strip. */
 .banner {
   display: flex; align-items: center; justify-content: center;
-  width: 100%; aspect-ratio: 1152 / 148;
+  width: 100%;
   margin: 12px 0;
   padding: 0;
+  background-color: var(--cream);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
   font-size: clamp(18px, 2.2vw, 26px);
 }
-.banner--ingredients { background-image: url('/images/hero-ingredients.svg'); }
-.banner--directions { background-image: url('/images/hero-directions.svg'); }
+/* Each strip keeps the exact aspect ratio of its own SVG (viewBox) so the motifs
+   stay undistorted; the two assets are not the same height. */
+.banner--ingredients {
+  background-image: url('/images/hero-ingredients.svg');
+  aspect-ratio: 1152 / 148;
+}
+.banner--directions {
+  background-image: url('/images/hero-directions.svg');
+  aspect-ratio: 1151 / 134;
+}
 
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 12px 0 6px; }
 .cols__title { color: var(--green-heading); font-size: 18px; margin-bottom: 8px; }

@@ -32,7 +32,8 @@
           <p class="rcard__time">
             <img class="icon" src="/assets/cooking-time.svg" alt="" /> Cooking time: {{ recipe.cookingTimeMin }}min
           </p>
-          <a class="btn btn-cream rcard__view" [routerLink]="['/recipe', recipe.id]">View</a>
+          <a class="btn btn-cream rcard__view" [routerLink]="['/recipe', recipe.id]"
+            [queryParams]="{ from: 'results' }">View</a>
         </article>
       }
     </div>

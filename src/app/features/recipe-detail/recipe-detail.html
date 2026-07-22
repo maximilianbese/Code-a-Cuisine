@@ -2,10 +2,10 @@
   <main class="page container">
     <header class="page__top">
       <app-logo />
-      <a class="link-arrow back" routerLink="/results">
+      <a class="link-arrow back" [routerLink]="back.link">
         <svg viewBox="0 0 24 24" fill="none"><path d="M20 12H5m0 0 6-6m-6 6 6 6"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-        Recipe results
+        {{ back.label }}
       </a>
     </header>
 

@@ -10,7 +10,10 @@
 .banner--art {
   margin: 18px 0 26px;
   padding: 0;
-  background-color: transparent;
+  /* The strip art has transparent top/bottom margins; a cream fill behind it
+     reads as the bar and stops the white page bleeding through as a thin
+     border above and below it. */
+  background-color: var(--cream);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;

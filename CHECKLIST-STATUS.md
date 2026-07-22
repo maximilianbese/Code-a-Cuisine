@@ -39,7 +39,7 @@ gespeichert und die Bibliothek liest live aus Firestore.
 - ✅ US9 ToDo-Liste pro Kochhelfer (Detailansicht)
 - ✅ US10 Nährwerte pro Portion **und** gesamt, inkl. Makro-Prozente
 - ✅ US11 Quota-Anzeige im Frontend + Sperre
-- ✅ US12 Bibliothek (live aus Firestore) + Paginierung (20/Seite)
+- ✅ US12 Bibliothek (live aus Firestore) + Paginierung (15/Seite, wie im Design)
 - ✅ US13 Klickbare Kategorie-Filter
 - ✅ US14 Rezept-Detail aus Bibliothek
 - ✅ Impressum-Seite (`/impressum`, per URL) + 404-Seite

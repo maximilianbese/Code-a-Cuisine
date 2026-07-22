@@ -1,11 +1,11 @@
 /* Full-width shell; content is capped at 1440px by .container / page wrappers.
-   `overflow-x: clip` lives here rather than on <html>/<body> on purpose: it
-   contains any horizontal bleed at the application root without turning the
-   document into a scroll container, so sticky positioning and scroll anchoring
-   keep working. `clip` (not `hidden`) also leaves the vertical axis untouched. */
+   No overflow rule here on purpose: clipping belongs on the one element that
+   actually bleeds (the hero plate column — see .hero in home.scss, which clips
+   its own overflow at full height), never blanket-applied to the shell/main
+   body. A global clip would silently mask real responsive bugs and can break
+   position: sticky and scroll anchoring for every page beneath it. */
 .app-shell {
   width: 100%;
-  overflow-x: clip;
 }
 
 /* Route transition: each screen dissolves in when its route activates,

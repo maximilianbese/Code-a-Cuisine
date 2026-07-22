@@ -23,10 +23,24 @@ export class RecipeDetail {
   readonly liked = signal(false);
   /** True when n8n was unreachable and this is a local demo recipe. */
   readonly isDemo = this.service.isDemo;
+  /** Back link that mirrors where the recipe was opened from (see backTarget). */
+  readonly back = this.backTarget();
 
   /** Resolve the recipe from the route as soon as the view is created. */
   constructor() {
     this.load();
+  }
+
+  /**
+   * The back link honours the entry point passed as `?from`: recipes opened from
+   * the generated results return there, everything else (cookbook, a shared link)
+   * returns to the cookbook — sending a cookbook visitor to empty results made no
+   * sense, so the cookbook is the safe default.
+   */
+  private backTarget(): { link: string; label: string } {
+    const from = this.route.snapshot.queryParamMap.get('from');
+    if (from === 'results') return { link: '/results', label: 'Recipe results' };
+    return { link: '/cookbook', label: 'Cookbook' };
   }
 
   /**

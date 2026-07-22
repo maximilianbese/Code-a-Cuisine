@@ -1,4 +1,5 @@
 import { Recipe } from '../models/recipe.model';
+import { ITALIAN_PASTA_SEEDS } from './library-italian';
 import { RecipeSeed, toRecipes } from './library-seed';
 
 /**
@@ -298,5 +299,9 @@ const SEEDS: readonly RecipeSeed[] = [
   },
 ];
 
-/** Every recipe available in the public cookbook. */
-export const LIBRARY_RECIPES: Recipe[] = toRecipes(SEEDS);
+/**
+ * Every recipe in the public cookbook: the curated cross-cuisine set above plus
+ * the generated Italian pasta library, which gives that cuisine enough recipes
+ * to exercise the paginator across several pages.
+ */
+export const LIBRARY_RECIPES: Recipe[] = toRecipes([...SEEDS, ...ITALIAN_PASTA_SEEDS]);

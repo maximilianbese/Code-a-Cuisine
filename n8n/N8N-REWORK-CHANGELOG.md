@@ -1,7 +1,12 @@
 # n8n Rework – Agent-zentriert (schlank, aber sicher)
 
-Neue Datei: `code-a-cuisine-recipe-generation.agent.json`
-Original bleibt unverändert: `code-a-cuisine-recipe-generation.json`
+**Aktueller Workflow (der einzige, den es zu importieren gilt):**
+`code-a-cuisine-recipe-generation.json`
+
+Es gibt bewusst nur noch **eine** Workflow-Datei. Die frühere
+code-lastige Variante wurde durch die agent-zentrierte Version ersetzt und
+entfernt, damit klar ist, welcher Stand gilt (die alte Fassung liegt bei Bedarf
+in der Git-Historie). Diese Datei ist der Stand, den wir uns gemeinsam ansehen.
 
 Ziel (laut Mentor): stärker auf den n8n **AI Agent** setzen, die manuelle
 Code-Pipeline drumherum reduzieren. Kostenschutz, Firestore-Speicherung und
@@ -49,7 +54,7 @@ Guard-Node (oder „On Error → Respond") wieder davor.
 
 ## Testschritte (beim gemeinsamen Import)
 
-1. `code-a-cuisine-recipe-generation.agent.json` in n8n importieren.
+1. `code-a-cuisine-recipe-generation.json` in n8n importieren.
 2. Credentials neu verbinden (Gemini, Firestore) – IDs werden beim Import nicht
    übernommen.
 3. `projectId` in `Save to Firestore` / `Read Firestore Library` setzen
