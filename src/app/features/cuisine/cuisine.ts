@@ -40,9 +40,16 @@ export class CuisinePage {
   /** Active page number (1-based). */
   readonly page = signal(1);
 
-  /** Load the library once the view is created. */
+  /**
+   * Load the backend library once the view is created and merge it with the
+   * recipes shipped with the app (live generations first), so a cuisine always
+   * lists its full catalogue and the pager stays testable even when the backend
+   * holds only a few recipes.
+   */
   constructor() {
-    this.api.getLibrary().subscribe((result) => this.fetched.set(result.recipes));
+    this.api.getLibrary().subscribe((result) =>
+      this.fetched.set(mergeById([...result.recipes, ...this.service.getAll()])),
+    );
   }
 
   /** The category tile this page belongs to, if the key is a known cuisine. */

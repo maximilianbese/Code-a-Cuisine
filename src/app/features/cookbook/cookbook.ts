@@ -29,9 +29,17 @@ export class Cookbook {
   /** Library recipes from the backend; mock data until the live fetch resolves. */
   private readonly fetched = signal<Recipe[]>(this.service.getAll());
 
-  /** Load the recipe library from the backend once the view is created. */
+  /**
+   * Load the backend library once the view is created and merge it with the
+   * recipes shipped with the app, so the cookbook always shows the full
+   * catalogue (live generations first) instead of replacing the shipped set —
+   * that would otherwise leave the library nearly empty whenever the backend
+   * holds only a handful of recipes.
+   */
   constructor() {
-    this.api.getLibrary().subscribe((result) => this.fetched.set(result.recipes));
+    this.api.getLibrary().subscribe((result) =>
+      this.fetched.set(mergeById([...result.recipes, ...this.service.getAll()])),
+    );
   }
 
   /**
